@@ -1,0 +1,7 @@
+# >>> whole-team >>>
+/factory/
+/.claude/agents/factory-*.md
+/.codex/agents/factory-*.toml
+/CLAUDE.md
+/AGENTS.md
+# <<< whole-team <<<
