@@ -5,6 +5,7 @@
 // renders through this layout.
 import { alternates, localizePath, t, type Locale } from "../i18n";
 import { siteProfile } from "../site";
+import { Analytics } from "../analytics";
 import Header from "./components/Header.astro";
 import Footer from "./components/Footer.astro";
 
@@ -71,6 +72,8 @@ const headAlternates = fallback
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalHref} />
     <meta property="og:type" content={ogType} />
+
+    <Analytics />
   </head>
   <body>
     <a class="skip-link" href="#main">
