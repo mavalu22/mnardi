@@ -1,0 +1,83 @@
+---
+// Button (05-design-spec.md §8 "Button, primary" / "Button, outlined"):
+// primary filled with the gold accent, or an outlined/secondary variant.
+// Props-only, no import from `content` (04-stack-profile.md §1 module
+// boundary). Renders an <a> when `href` is set, a <button> otherwise, so
+// callers get real link semantics for navigation ("View projects ↗",
+// "Open project →") without a wrapping element.
+interface Props {
+  variant?: "primary" | "outlined";
+  href?: string;
+  /** Native "_blank" etc.; pairs with rel="noopener" automatically. */
+  target?: "_blank";
+  type?: "button" | "submit";
+  class?: string;
+}
+
+const {
+  variant = "outlined",
+  href,
+  target,
+  type = "button",
+  class: className,
+} = Astro.props;
+
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  class:list={["btn", `btn-${variant}`, className]}
+  href={href}
+  target={target}
+  rel={target === "_blank" ? "noopener" : undefined}
+  type={href ? undefined : type}
+>
+  <slot />
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    border-radius: var(--radius-button);
+    padding: 11px 15px;
+    font-size: 13px;
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-family-sans);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform 180ms,
+      box-shadow 180ms,
+      background-color 180ms,
+      border-color 180ms;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-hover);
+  }
+  .btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .btn-primary {
+    background: var(--color-gold-accent);
+    color: var(--color-button-ink);
+    border: 1px solid var(--color-gold-accent);
+  }
+  .btn-primary:active {
+    background: var(--color-gold-text);
+    border-color: var(--color-gold-text);
+  }
+
+  .btn-outlined {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-line);
+  }
+  .btn-outlined:active {
+    background: var(--color-surface-2);
+  }
+</style>

@@ -1,0 +1,147 @@
+---
+// EntryRow (05-design-spec.md §8 "Compact project/writing row"): a
+// full-width row separated by a 1px line, used identically on Home,
+// Projects index and Writing index. Two variants share one component
+// since both are "supplementary mono column + title + description",
+// differing only in the leading column and its grid width. Props-only, no
+// `content` import — callers pass already-localized/formatted strings.
+interface Props {
+  variant: "project" | "writing";
+  href: string;
+  /** Project variant: the row number, e.g. "01". */
+  number?: string;
+  /** Writing variant: the display date, e.g. "2026 / 09". */
+  date?: string;
+  /** Writing variant: the machine-readable <time datetime> value. */
+  dateTime?: string;
+  title: string;
+  description: string;
+  /** Stack labels (project) or topic labels (writing), joined with " · ". */
+  meta: string[];
+}
+
+const { variant, href, number, date, dateTime, title, description, meta } =
+  Astro.props;
+const metaText = meta.join(" · ");
+---
+
+<a class:list={["entry-row", `entry-row-${variant}`]} href={href}>
+  {variant === "project" ? (
+    <span class="entry-row-num">{number}</span>
+  ) : (
+    <time class="entry-row-date" datetime={dateTime}>
+      {date}
+    </time>
+  )}
+  <span class="entry-row-copy">
+    <span class="entry-row-title">{title}</span>
+    <span class="entry-row-description">{description}</span>
+  </span>
+  <span class="entry-row-meta">
+    {metaText}
+    <span class="entry-row-arrow" aria-hidden="true">
+      ↗
+    </span>
+  </span>
+</a>
+
+<style>
+  .entry-row {
+    display: grid;
+    gap: 26px;
+    align-items: center;
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid var(--color-line);
+    color: inherit;
+    text-decoration: none;
+    transition: padding-left 180ms;
+  }
+  .entry-row-project {
+    grid-template-columns: 80px 1fr auto;
+  }
+  .entry-row-writing {
+    grid-template-columns: 130px 1fr auto;
+    align-items: start;
+    gap: 24px;
+  }
+
+  .entry-row-project:hover {
+    padding-left: 6px;
+  }
+
+  .entry-row-num {
+    color: var(--color-faint);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-meta);
+    font-weight: var(--font-weight-semibold);
+  }
+  .entry-row-date {
+    color: var(--color-faint);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-meta);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+
+  .entry-row-copy {
+    display: block;
+  }
+  .entry-row-title {
+    display: block;
+    font-size: var(--font-size-row-title);
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    transition: color 180ms;
+  }
+  .entry-row-writing:hover .entry-row-title {
+    color: var(--color-gold-text);
+  }
+  .entry-row-description {
+    display: block;
+    margin-top: 4px;
+    color: var(--color-muted);
+    font-size: 14px;
+    max-width: 700px;
+  }
+
+  .entry-row-meta {
+    justify-self: end;
+    color: var(--color-muted);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-meta);
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
+  }
+  .entry-row-arrow {
+    color: var(--color-gold-accent);
+    font-size: 18px;
+    margin-left: var(--space-2);
+  }
+
+  @media (max-width: 940px) {
+    .entry-row-project {
+      grid-template-columns: 50px 1fr auto;
+    }
+    .entry-row-project .entry-row-meta {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .entry-row-project {
+      grid-template-columns: 38px 1fr auto;
+      gap: 14px;
+    }
+    .entry-row-project .entry-row-title {
+      font-size: 19px;
+    }
+    .entry-row-writing {
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+    .entry-row-writing .entry-row-date {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

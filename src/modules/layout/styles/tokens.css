@@ -1,70 +1,45 @@
 /*
   Design tokens: color, typography, spacing, radius and elevation.
-  Values from factory/input/05-design-spec.md sections 3-6.
-  Plain CSS custom properties, no preprocessor: prefers-color-scheme drives
-  the "system" state, [data-theme] attribute overrides force an explicit
-  choice (05-design-spec.md §2/§8).
+  Values from factory/input/05-design-spec.md sections 3-6 (2026-09-29
+  engineering-hub redesign, T-019). Plain CSS custom properties, no
+  preprocessor: prefers-color-scheme drives the "system" state,
+  [data-theme] attribute overrides force an explicit choice
+  (05-design-spec.md §2/§8) — same mechanism as before this redesign,
+  only the values it resolves to change.
+
+  Every custom property below a "Back-compat aliases" comment is not part
+  of the design-spec token list; it keeps the exact name every page shipped
+  by T-009-T-015 already reads, pointed at the nearest new token, so those
+  pages keep rendering with no undefined var() until T-021-T-023 replace
+  them and T-024 removes the aliases (05-design-spec.md AC6).
 */
 
 :root {
-  /* Color - brand & neutral (light theme defaults) */
-  --color-brand-600: #1d4ed8;
-  --color-brand-700: #1e3a8a;
-  --color-brand-100: #dbeafe;
-  --color-neutral-0: #ffffff;
-  --color-neutral-50: #f9fafb;
-  --color-neutral-100: #f3f4f6;
-  --color-neutral-200: #e5e7eb;
-  --color-neutral-300: #d1d5db;
-  --color-neutral-400: #9ca3af;
-  --color-neutral-500: #6b7280;
-  --color-neutral-600: #4b5563;
-  --color-neutral-700: #374151;
-  --color-neutral-800: #1f2937;
-  --color-neutral-900: #111827;
-  --color-neutral-950: #0b0e14;
+  /* Neutral & surface (light theme defaults, §3) */
+  --color-bg: #f4f2ea;
+  --color-surface: #fffdf8;
+  --color-surface-2: #ece9df;
+  --color-text: #171914;
+  --color-muted: #61645b;
+  --color-faint: #85887e;
+  --color-line: #d8d4c7;
 
-  /* Semantic */
-  --color-success: #15803d;
-  --color-warning: #92400e;
+  /* Gold accent, split by role (§3) */
+  --color-gold-text: #835f1e;
+  --color-gold-accent: #9d792c;
+  --color-gold-soft: rgba(157, 121, 44, 0.09);
+
+  /* Semantic (§3, unchanged from the previous palette) */
+  --color-info: #1d4ed8;
   --color-danger: #b91c1c;
-  --color-info: var(--color-brand-600);
 
-  /* Surface & text (light) */
-  --color-surface-page: var(--color-neutral-0);
-  --color-surface-raised: var(--color-neutral-50);
-  --color-surface-sunken: var(--color-neutral-100);
-  --color-border-default: var(--color-neutral-200);
-  --color-border-input: var(--color-neutral-500);
-  --color-text-primary: var(--color-neutral-900);
-  --color-text-secondary: var(--color-neutral-600);
-  --color-text-disabled: var(--color-neutral-400);
-  --color-text-inverse: var(--color-neutral-0);
-  --color-focus-ring: var(--color-brand-600);
-  --color-brand-fill: var(--color-brand-600);
-  --color-brand-fill-hover: var(--color-brand-700);
-  --color-brand-fill-active: var(--color-brand-700);
-  --color-brand-text: var(--color-brand-600);
-  --color-tag-bg: var(--color-brand-100);
+  /* Focus ring (§3): reuses color.gold.text in both themes */
+  --color-focus-ring: var(--color-gold-text);
 
-  /* Accent (second hue, decorative/large-text use only — see design spec §3) */
-  --color-accent-600: #0d9488;
-  --color-accent-700: #115e59;
-  --color-accent-100: #ccfbf1;
-  --color-accent-fill: var(--color-accent-600);
-  --color-accent-fill-hover: var(--color-accent-700);
-  --color-accent-text: var(--color-accent-600);
-  --color-accent-tint: var(--color-accent-100);
-  --gradient-accent-bar: linear-gradient(
-    90deg,
-    var(--color-brand-fill),
-    var(--color-accent-fill)
-  );
-  --gradient-hero-glow:
-    radial-gradient(circle at 15% 20%, rgba(29, 78, 216, 0.1), transparent 55%),
-    radial-gradient(circle at 85% 75%, rgba(13, 148, 136, 0.1), transparent 55%);
+  /* Ink used on the gold-filled primary button in both themes (§3) */
+  --color-button-ink: #17150f;
 
-  /* Typography */
+  /* Typography (§4) */
   --font-family-sans:
     system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
     sans-serif;
@@ -72,60 +47,104 @@
     ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono",
     monospace;
 
-  --font-size-xs: 0.75rem;
-  --line-height-xs: 1rem;
-  --font-size-sm: 0.875rem;
-  --line-height-sm: 1.25rem;
-  --font-size-base: 1rem;
-  --line-height-base: 1.5rem;
-  --font-size-lg: 1.125rem;
-  --line-height-lg: 1.75rem;
-  --font-size-xl: 1.25rem;
-  --line-height-xl: 1.75rem;
-  --font-size-2xl: 1.5rem;
-  --line-height-2xl: 2rem;
-  --font-size-3xl: 1.875rem;
-  --line-height-3xl: 2.25rem;
-  --font-size-4xl: clamp(1.75rem, 4vw + 1rem, 2.75rem);
-  --line-height-4xl: 1.15;
+  --font-size-eyebrow: 0.6875rem; /* 11px */
+  --font-size-meta: 0.6875rem; /* 10-11px, meta text picks the top of the range */
+  --font-size-body: 1rem; /* 16px */
+  --font-size-lead: 1.0625rem; /* 17px, prose/lead paragraphs */
+  --font-size-row-title: 1.375rem; /* 22px */
+  --font-size-section-title: 2.125rem; /* 34px */
+  --font-size-feature-title: 2.5rem; /* 40px */
+  --font-size-h2-prose: 1.8125rem; /* 29px */
+  --font-size-page-title: clamp(3.125rem, 7vw, 4.875rem); /* 50-78px */
+  --font-size-home-title: clamp(3.625rem, 8vw, 6.375rem); /* 58-102px */
+
+  --line-height-body: 1.65;
+  --line-height-eyebrow: 1.3;
+  --letter-spacing-eyebrow: 0.16em;
 
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+  --font-weight-wordmark: 760;
 
-  /* Spacing (4px base unit) */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
-  --space-7: 3rem;
-  --space-8: 4rem;
+  /* Spacing (§5, 4px base unit) */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.5rem; /* 24px */
+  --space-6: 2rem; /* 32px */
+  --space-7: 3rem; /* 48px */
+  --space-8: 4rem; /* 64px */
+  --space-9: 4.5rem; /* 72px */
+  --space-10: 6.25rem; /* 100px */
 
-  /* Layout */
-  --container-max-width: 1120px;
-  --container-padding: var(--space-4);
+  /* Layout (§5) */
+  --container-max-width: 1180px;
+  --container-padding: 15px; /* phone-only one-off gutter, kept as-is per §5/§9 */
 
-  /* Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
-  --radius-full: 9999px;
+  /* Radius (§6) */
+  --radius-button: 12px;
+  --radius-pill: 9999px;
+  --radius-meta-box: 14px;
+  --radius-feature: 24px;
 
-  /* Elevation */
-  --elevation-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --elevation-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Elevation (§6): the only shadow in the system, light theme value */
+  --elevation-hover: 0 24px 60px rgba(38, 34, 25, 0.08);
 
-  /* Icons (§7, kept alongside for component use) */
+  /* Icons (§7, kept alongside for component use; not resized by the redesign) */
   --icon-size-sm: 16px;
   --icon-size-md: 20px;
   --icon-size-lg: 24px;
-  /* Not in 05-design-spec.md §7 (16/20/24px only); added for the empty-state
-     icon, which needs a larger size than any existing token. Flag for the
-     spec to be updated to include this size. */
   --icon-size-xl: 2.5rem;
+
+  /*
+    Back-compat aliases for T-009-T-015 (removed by T-024). Declared once,
+    as var() references: because they resolve on the same element as the
+    tokens they point to, they automatically pick up each theme override
+    below with no need to repeat them per theme block.
+  */
+  --color-surface-page: var(--color-bg);
+  --color-surface-raised: var(--color-surface);
+  --color-surface-sunken: var(--color-surface-2);
+  --color-border-default: var(--color-line);
+  --color-border-input: var(--color-muted);
+  --color-text-primary: var(--color-text);
+  --color-text-secondary: var(--color-muted);
+  --color-text-disabled: var(--color-faint);
+  --color-text-inverse: var(--color-button-ink);
+  --color-tag-bg: var(--color-surface-2);
+  --color-brand-text: var(--color-gold-text);
+  --color-brand-fill: var(--color-gold-accent);
+  --color-brand-fill-hover: var(--color-gold-text);
+  --color-brand-fill-active: var(--color-gold-text);
+  --color-accent-text: var(
+    --color-gold-text
+  ); /* fixes B-003 on unmigrated pages too */
+  --color-accent-fill: var(--color-gold-accent);
+  --color-accent-fill-hover: var(--color-gold-text);
+  --color-accent-tint: var(--color-gold-soft);
+  --gradient-accent-bar: linear-gradient(
+    90deg,
+    var(--color-gold-accent),
+    var(--color-gold-text)
+  );
+  --gradient-hero-glow: radial-gradient(
+    circle at 10% -8%,
+    var(--color-gold-soft),
+    transparent 30%
+  );
+  --font-size-xs: var(--font-size-meta);
+  --font-size-sm: 0.8125rem; /* 13px, small secondary text */
+  --font-size-lg: var(--font-size-lead);
+  --font-size-xl: 0.9375rem; /* 15px, matches the wordmark's own size (§2) */
+  --radius-sm: 6px; /* matches the prose inline-code radius (§8) */
+  --radius-md: var(--radius-button);
+  --radius-lg: var(--radius-meta-box);
+  --radius-full: var(--radius-pill);
+  --elevation-sm: var(--elevation-hover);
+  --elevation-md: var(--elevation-hover);
 }
 
 /*
@@ -133,147 +152,72 @@
   §2/§8) and the OS preference can both drive them without duplicating
   logic in script: the media query covers "system" (the default, no
   data-theme attribute set), and the [data-theme="dark"] attribute
-  (written by the toggle's inline script, added by a later task) forces
+  (written by the toggle's inline script, unchanged behaviour) forces
   dark regardless of the OS setting. [data-theme="light"] forces light
   back even if the OS is dark. Same variable list, so keep the two dark
   blocks in sync.
 */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-brand-400: #7da6ff;
-    --color-brand-300: #a9c4ff;
-    --color-accent-400: #2dd4bf;
-    --color-accent-300: #5eead4;
+    --color-bg: #0b0d0a;
+    --color-surface: #111410;
+    --color-surface-2: #171a15;
+    --color-text: #f4f1e8;
+    --color-muted: #a3a49c;
+    --color-faint: #777970;
+    --color-line: #2a2e28;
 
-    --color-surface-page: #0b0e14;
-    --color-surface-raised: #12161f;
-    --color-surface-sunken: #171c27;
-    --color-border-default: #262b36;
-    --color-border-input: #8b93a1;
-    --color-text-primary: #f3f4f6;
-    --color-text-secondary: #9ca3af;
-    --color-text-disabled: #6b7280;
-    --color-text-inverse: #0b0e14;
-    --color-focus-ring: var(--color-brand-400);
+    --color-gold-text: #d9b763;
+    --color-gold-accent: #d9b763;
+    --color-gold-soft: rgba(217, 183, 99, 0.11);
 
-    --color-success: #4ade80;
-    --color-warning: #fbbf24;
+    --color-info: #7da6ff;
     --color-danger: #f87171;
-    --color-info: var(--color-brand-400);
 
-    --color-brand-fill: var(--color-brand-400);
-    --color-brand-fill-hover: var(--color-brand-300);
-    --color-brand-fill-active: var(--color-brand-300);
-    --color-brand-text: var(--color-brand-400);
-    --color-tag-bg: var(--color-surface-sunken);
-    --color-accent-fill: var(--color-accent-400);
-    --color-accent-fill-hover: var(--color-accent-300);
-    --color-accent-text: var(--color-accent-400);
-    --color-accent-tint: var(--color-surface-sunken);
-
-    --gradient-hero-glow:
-      radial-gradient(
-        circle at 15% 20%,
-        rgba(125, 166, 255, 0.16),
-        transparent 55%
-      ),
-      radial-gradient(
-        circle at 85% 75%,
-        rgba(45, 212, 191, 0.14),
-        transparent 55%
-      );
-
-    --elevation-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-    --elevation-md: 0 4px 16px rgba(0, 0, 0, 0.6);
+    --elevation-hover: 0 24px 65px rgba(0, 0, 0, 0.26);
   }
 }
 
-/* Manual override: forced dark (theme-toggle set to "dark") regardless of OS setting */
 :root[data-theme="dark"] {
-  --color-brand-400: #7da6ff;
-  --color-brand-300: #a9c4ff;
-  --color-accent-400: #2dd4bf;
-  --color-accent-300: #5eead4;
+  --color-bg: #0b0d0a;
+  --color-surface: #111410;
+  --color-surface-2: #171a15;
+  --color-text: #f4f1e8;
+  --color-muted: #a3a49c;
+  --color-faint: #777970;
+  --color-line: #2a2e28;
 
-  --color-surface-page: #0b0e14;
-  --color-surface-raised: #12161f;
-  --color-surface-sunken: #171c27;
-  --color-border-default: #262b36;
-  --color-border-input: #8b93a1;
-  --color-text-primary: #f3f4f6;
-  --color-text-secondary: #9ca3af;
-  --color-text-disabled: #6b7280;
-  --color-text-inverse: #0b0e14;
-  --color-focus-ring: var(--color-brand-400);
+  --color-gold-text: #d9b763;
+  --color-gold-accent: #d9b763;
+  --color-gold-soft: rgba(217, 183, 99, 0.11);
 
-  --color-success: #4ade80;
-  --color-warning: #fbbf24;
+  --color-info: #7da6ff;
   --color-danger: #f87171;
-  --color-info: var(--color-brand-400);
 
-  --color-brand-fill: var(--color-brand-400);
-  --color-brand-fill-hover: var(--color-brand-300);
-  --color-brand-fill-active: var(--color-brand-300);
-  --color-brand-text: var(--color-brand-400);
-  --color-tag-bg: var(--color-surface-sunken);
-  --color-accent-fill: var(--color-accent-400);
-  --color-accent-fill-hover: var(--color-accent-300);
-  --color-accent-text: var(--color-accent-400);
-  --color-accent-tint: var(--color-surface-sunken);
-
-  --gradient-hero-glow:
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(125, 166, 255, 0.16),
-      transparent 55%
-    ),
-    radial-gradient(
-      circle at 85% 75%,
-      rgba(45, 212, 191, 0.14),
-      transparent 55%
-    );
-
-  --elevation-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --elevation-md: 0 4px 16px rgba(0, 0, 0, 0.6);
+  --elevation-hover: 0 24px 65px rgba(0, 0, 0, 0.26);
 }
 
-/* Manual override: forced light (theme-toggle set to "light") regardless of OS setting.
-   Values equal the :root light defaults; listed explicitly so this selector wins
-   over an OS-dark @media block, with equal-specificity concerns avoided by scoping
-   the dark block to :not([data-theme="light"]) above. */
+/* Manual override: forced light (theme-toggle set to "light") regardless of OS
+   setting. Values equal the :root light defaults; listed explicitly so this
+   selector wins over an OS-dark @media block, with equal-specificity concerns
+   avoided by scoping the dark block to :not([data-theme="light"]) above. */
 :root[data-theme="light"] {
-  --color-surface-page: var(--color-neutral-0);
-  --color-surface-raised: var(--color-neutral-50);
-  --color-surface-sunken: var(--color-neutral-100);
-  --color-border-default: var(--color-neutral-200);
-  --color-border-input: var(--color-neutral-500);
-  --color-text-primary: var(--color-neutral-900);
-  --color-text-secondary: var(--color-neutral-600);
-  --color-text-disabled: var(--color-neutral-400);
-  --color-text-inverse: var(--color-neutral-0);
-  --color-focus-ring: var(--color-brand-600);
+  --color-bg: #f4f2ea;
+  --color-surface: #fffdf8;
+  --color-surface-2: #ece9df;
+  --color-text: #171914;
+  --color-muted: #61645b;
+  --color-faint: #85887e;
+  --color-line: #d8d4c7;
 
-  --color-success: #15803d;
-  --color-warning: #92400e;
+  --color-gold-text: #835f1e;
+  --color-gold-accent: #9d792c;
+  --color-gold-soft: rgba(157, 121, 44, 0.09);
+
+  --color-info: #1d4ed8;
   --color-danger: #b91c1c;
-  --color-info: var(--color-brand-600);
 
-  --color-brand-fill: var(--color-brand-600);
-  --color-brand-fill-hover: var(--color-brand-700);
-  --color-brand-fill-active: var(--color-brand-700);
-  --color-brand-text: var(--color-brand-600);
-  --color-tag-bg: var(--color-brand-100);
-  --color-accent-fill: var(--color-accent-600);
-  --color-accent-fill-hover: var(--color-accent-700);
-  --color-accent-text: var(--color-accent-600);
-  --color-accent-tint: var(--color-accent-100);
-
-  --gradient-hero-glow:
-    radial-gradient(circle at 15% 20%, rgba(29, 78, 216, 0.1), transparent 55%),
-    radial-gradient(circle at 85% 75%, rgba(13, 148, 136, 0.1), transparent 55%);
-
-  --elevation-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --elevation-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --elevation-hover: 0 24px 60px rgba(38, 34, 25, 0.08);
 }
 
 /*
@@ -283,7 +227,9 @@
   properties (dark). Inline styles win over any selector's specificity, so `!important`
   is required here to swap in the dark colors; that's scoped tightly to Shiki's own
   `.astro-code` output, using the same "system" + manual-toggle selector pair as the
-  rest of this file, so code blocks (project/post pages, T-010) follow dark mode too.
+  rest of this file, so code blocks (project/post pages, T-010; Prose panel, T-019 §8)
+  follow dark mode too. Fenced code panels don't theme-swap their own container
+  (05-design-spec.md §8 "Prose / code block"), only Shiki's own token colors do.
 */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .astro-code,
