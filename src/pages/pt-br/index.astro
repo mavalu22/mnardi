@@ -1,16 +1,7 @@
 ---
-// pt-BR home. Same temporary content as the English home, rendered through
-// BaseLayout with the pt-BR locale; replaced by the real Home page in a
-// later task (src/modules/home/).
-import { BaseLayout } from "../../modules/layout";
-import TempStyleCheck from "../_temp-style-check.astro";
+// pt-BR home route. Same shape as the English route (04-stack-profile.md §16); `getProjects`
+// and `getPosts` resolve to the English fallback for any untranslated entry (ADR-007).
+import { HomePage } from "../../modules/home";
 ---
 
-<BaseLayout
-  locale="pt-br"
-  path="/pt-br/"
-  title="mnardi.com — verificação do design system"
-  description="Página temporária de verificação do design system do mnardi.com: amostras de tokens e componentes compartilhados."
->
-  <TempStyleCheck />
-</BaseLayout>
+<HomePage locale="pt-br" path="/pt-br/" />

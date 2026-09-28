@@ -1,16 +1,7 @@
 ---
-// English home. Temporary content (design-system style check) rendered
-// through BaseLayout; replaced by the real Home page in a later task
-// (src/modules/home/).
-import { BaseLayout } from "../modules/layout";
-import TempStyleCheck from "./_temp-style-check.astro";
+// English home route (05-design-spec.md §11 s01; 04-stack-profile.md §1). Thin route file: the
+// only content it renders is `HomePage`.
+import { HomePage } from "../modules/home";
 ---
 
-<BaseLayout
-  locale="en"
-  path="/"
-  title="mnardi.com — design system check"
-  description="Temporary style check page for the mnardi.com design system: token swatches and shared components."
->
-  <TempStyleCheck />
-</BaseLayout>
+<HomePage locale="en" path="/" />
