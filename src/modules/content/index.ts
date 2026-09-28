@@ -13,7 +13,8 @@ export {
   renderPost,
 } from "./repository";
 export type { RenderedBody } from "./repository";
-export type { Project, Post, ProjectLinks } from "./types";
+export type { Project, Post, ProjectLinks, MetaItem, Heading } from "./types";
+export { readingMinutes } from "./readingMinutes";
 // Re-exported so src/content.config.ts (which Astro requires at that exact path) can import it
 // through this module's public interface instead of reaching into collections.ts directly.
 export { collections } from "./collections";

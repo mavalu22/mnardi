@@ -38,6 +38,12 @@ const demoHref =
     : undefined;
 
 const contentLang = entry.isFallback ? "en" : undefined;
+
+// SVG covers (T-018's interim prototype art) can't be rasterized to webp without
+// `image.dangerouslyProcessSVG` (Astro's SVG optimization pipeline is opt-in for security); pass
+// them through unchanged instead. Raster covers (the screenshots that replace them later) keep
+// the existing webp conversion, no code change needed then (03-platform-architecture.md §5).
+const coverFormat = entry.cover?.format === "svg" ? "svg" : "webp";
 ---
 
 <BaseLayout
@@ -68,7 +74,7 @@ const contentLang = entry.isFallback ? "en" : undefined;
           class="cover-image"
           src={entry.cover}
           alt={entry.coverAlt ?? ""}
-          format="webp"
+          format={coverFormat}
         />
       )}
 

@@ -10,6 +10,11 @@ export interface ProjectLinks {
   demo?: string;
 }
 
+export interface MetaItem {
+  label: string;
+  value: string;
+}
+
 export interface Project {
   slug: string;
   locale: Locale;
@@ -18,7 +23,11 @@ export interface Project {
   title: string;
   description: string;
   techStack: string[];
+  /** Always an object, even when the frontmatter has no `links` (03 §5): both may be undefined. */
   links: ProjectLinks;
+  category?: string;
+  topics?: string[];
+  meta?: MetaItem[];
   order?: number;
   date?: Date;
   cover?: ImageMetadata;
@@ -34,7 +43,14 @@ export interface Post {
   date: Date;
   summary: string;
   updated?: Date;
+  topics?: string[];
   body: string;
+}
+
+/** A body's level-2 heading, in document order, with the `id` its rendered `<h2>` will get. */
+export interface Heading {
+  id: string;
+  text: string;
 }
 
 /**
