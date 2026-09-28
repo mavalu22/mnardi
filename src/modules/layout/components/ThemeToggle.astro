@@ -1,12 +1,13 @@
 ---
 // Header control: cycles system -> light -> dark -> system on click
-// (05-design-spec.md §8 "Theme toggle", §2, §11.4; 03-platform-architecture.md §8).
+// (05-design-spec.md §8 "Theme toggle" — visual restyle only, behavior
+// UNCHANGED from the shipped site, see §2; 03-platform-architecture.md §8).
 //
-// The button itself and its icons are rendered by Astro (so labels are
+// The button itself and its glyph are rendered by Astro (so labels are
 // localized), but the two behaviours that make the toggle work — applying a
 // stored choice before first paint, and wiring the click handler — live in
 // two small inline scripts whose *text* must stay byte-for-byte identical on
-// every page and in both locales (T-017 will allowlist them in a CSP by
+// every page and in both locales (T-017 allowlists them in a CSP by
 // SHA-256 hash). To keep them identical, neither script contains any
 // interpolated value: the click-handler script reads its localized labels
 // from `data-label-*` attributes set here by Astro, never from
@@ -34,38 +35,9 @@ const { locale } = Astro.props;
   data-label-light={t(locale, "themeToggle.light")}
   data-label-dark={t(locale, "themeToggle.dark")}
 >
-  <svg
-    class="icon theme-toggle-icon-system"
-    aria-hidden="true"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.5"
-  >
-    <rect x="3" y="4" width="18" height="12" rx="2"></rect>
-    <path d="M8 20h8M12 16v4"></path>
-  </svg>
-  <svg
-    class="icon theme-toggle-icon-light"
-    aria-hidden="true"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.5"
-  >
-    <circle cx="12" cy="12" r="4"></circle>
-    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
-  </svg>
-  <svg
-    class="icon theme-toggle-icon-dark"
-    aria-hidden="true"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.5"
-  >
-    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
-  </svg>
+  <span class="theme-toggle-glyph" aria-hidden="true">
+    ◐
+  </span>
   <span class="sr-only theme-toggle-label">
     {t(locale, "themeToggle.system")}
   </span>
@@ -79,10 +51,10 @@ const { locale } = Astro.props;
     width: 36px;
     height: 36px;
     padding: 0;
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-full);
-    background: var(--color-surface-raised);
-    color: var(--color-text-secondary);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    color: var(--color-muted);
     cursor: pointer;
     transition:
       color 150ms,
@@ -93,29 +65,21 @@ const { locale } = Astro.props;
     display: inline-flex;
   }
   .theme-toggle:hover {
-    color: var(--color-brand-text);
-    border-color: var(--color-border-input);
+    color: var(--color-gold-text);
+    border-color: var(--color-gold-accent);
   }
   .theme-toggle:active {
-    background: var(--color-surface-sunken);
+    background: var(--color-surface-2);
   }
-  .theme-toggle .icon {
-    width: var(--icon-size-md);
-    height: var(--icon-size-md);
-    margin: 0;
+  .theme-toggle-glyph {
+    font-size: 16px;
+    line-height: 1;
   }
-  .theme-toggle-icon-light,
-  .theme-toggle-icon-dark,
-  .theme-toggle-icon-system {
-    display: none;
-  }
-  .theme-toggle[data-state="system"] .theme-toggle-icon-system {
-    display: block;
-  }
-  .theme-toggle[data-state="light"] .theme-toggle-icon-light {
-    display: block;
-  }
-  .theme-toggle[data-state="dark"] .theme-toggle-icon-dark {
-    display: block;
+  /* Glyph recolors per the current data-state (05-design-spec.md §8 "Theme toggle"),
+     read by CSS only — the click-handler script only ever sets `data-state`, never a
+     color, keeping the script's text unchanged (see the header comment above). */
+  .theme-toggle[data-state="dark"] .theme-toggle-glyph,
+  .theme-toggle[data-state="light"] .theme-toggle-glyph {
+    color: var(--color-gold-text);
   }
 </style>
