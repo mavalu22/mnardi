@@ -21,6 +21,11 @@ const en = {
   "home.viewResume": "View resume",
   "a11y.opensInNewTab": "(opens in a new tab)",
 
+  "projects.pageTitle": "Projects — Matheus Nardi",
+  "projects.metaDescription":
+    "A selection of things I've built, listed in the order I'd want you to see them.",
+  "projects.heading": "Projects",
+
   "project.techStackAriaLabel": "Tech stack",
   "project.backToProjects": "Back to Projects",
   "project.repoLink": "Repository",

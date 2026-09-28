@@ -23,6 +23,11 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
   "home.viewResume": "Ver currículo",
   "a11y.opensInNewTab": "(abre em uma nova aba)",
 
+  "projects.pageTitle": "Projetos — Matheus Nardi",
+  "projects.metaDescription":
+    "Uma seleção de coisas que eu construí, na ordem em que eu gostaria que você as visse.",
+  "projects.heading": "Projetos",
+
   "project.techStackAriaLabel": "Tecnologias utilizadas",
   "project.backToProjects": "Voltar para Projetos",
   "project.repoLink": "Repositório",

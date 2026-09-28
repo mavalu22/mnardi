@@ -1,0 +1,80 @@
+---
+// Projects listing page (03-platform-architecture.md §4 "<ProjectsPage locale>";
+// 05-design-spec.md §11 s02). Renders every project in its manual `order`
+// (content module already sorts them), one Card per project linking to its
+// detail page in the same locale, or the shared empty state when there are
+// none yet (§8 "Empty state").
+import { BaseLayout, Card, EmptyState } from "../layout";
+import { localizePath, t, type Locale } from "../i18n";
+import { getProjects } from "../content";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const path = "/projects/";
+const projects = await getProjects(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  title={t(locale, "projects.pageTitle")}
+  description={t(locale, "projects.metaDescription")}
+  path={path}
+>
+  <div class="container">
+    <span class="eyebrow">{t(locale, "eyebrow.projects")}</span>
+    <h1>{t(locale, "projects.heading")}</h1>
+    <span class="title-accent" aria-hidden="true"></span>
+    <p class="lead">{t(locale, "projects.metaDescription")}</p>
+
+    {projects.length === 0 ? (
+      <EmptyState>{t(locale, "emptyState.projects")}</EmptyState>
+    ) : (
+      <ul class="grid">
+        {projects.map((project) => (
+          <li>
+            <Card
+              href={localizePath(`/projects/${project.slug}/`, locale)}
+              heading={project.title}
+              headingLevel="h2"
+            >
+              {project.description}
+            </Card>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .title-accent {
+    display: block;
+    width: 4rem;
+    height: 3px;
+    margin-bottom: var(--space-5);
+    background: var(--gradient-accent-bar);
+    border-radius: var(--radius-sm);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    list-style: none;
+    margin: var(--space-6) 0 0 0;
+    padding: 0;
+  }
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

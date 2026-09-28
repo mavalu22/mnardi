@@ -2,3 +2,4 @@
 // route files, import only from this file, never from a file inside `src/modules/projects/`.
 
 export { default as ProjectPage } from "./ProjectPage.astro";
+export { default as ProjectsPage } from "./ProjectsPage.astro";
