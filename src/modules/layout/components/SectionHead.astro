@@ -1,0 +1,64 @@
+---
+// SectionHead (05-design-spec.md §8 "section-head" pattern used on Home /
+// Projects / Writing listings): eyebrow label, section title, optional
+// "view all" link. Props-only, no `content` import.
+interface Props {
+  eyebrow: string;
+  title: string;
+  linkHref?: string;
+  linkLabel?: string;
+}
+
+const { eyebrow, title, linkHref, linkLabel } = Astro.props;
+---
+
+<div class="section-head">
+  <div class="section-head-copy">
+    <p class="eyebrow">{eyebrow}</p>
+    <h2>{title}</h2>
+  </div>
+  {linkHref && linkLabel && (
+    <a class="section-link" href={linkHref}>
+      {linkLabel}
+    </a>
+  )}
+</div>
+
+<style>
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--space-5);
+    margin-bottom: var(--space-5);
+  }
+  .section-head-copy .eyebrow {
+    margin-bottom: var(--space-2);
+  }
+  .section-head h2 {
+    margin: 0;
+  }
+  .section-link {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-meta);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .section-link:hover {
+    color: var(--color-gold-text);
+  }
+
+  @media (max-width: 640px) {
+    .section-head {
+      display: block;
+    }
+    .section-link {
+      display: inline-block;
+      margin-top: var(--space-3);
+    }
+  }
+</style>

@@ -1,0 +1,65 @@
+---
+// Prose (05-design-spec.md §8 "Prose / code block"): styles rendered
+// Markdown for project case studies and articles. Props-only: the caller
+// passes already-rendered HTML (Astro's `render()` result, `<Content />`)
+// through the default slot; this component never touches `content` itself.
+---
+
+<div class="prose">
+  <slot />
+</div>
+
+<style>
+  .prose :global(h2) {
+    font-size: var(--font-size-h2-prose);
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    margin: 42px 0 12px;
+  }
+  .prose :global(p),
+  .prose :global(li) {
+    font-size: var(--font-size-lead);
+    line-height: 1.65;
+    color: var(--color-muted);
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 20px;
+  }
+
+  /* Inline code: meaningful small text, uses the text-safe gold (§3/§12) */
+  .prose :global(code) {
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-line);
+    padding: 2px 6px;
+    border-radius: 6px;
+    color: var(--color-gold-text);
+    font-family: var(--font-family-mono);
+    font-size: 0.9em;
+  }
+
+  /*
+    Fenced code blocks: a near-black panel in both site themes (code is
+    conventionally shown dark regardless of the page theme, §8), the
+    long-line scroll happens inside the block, not the page. Shiki's own
+    dual-theme color swap (tokens.css) is unaffected — only the container
+    is styled here.
+  */
+  .prose :global(pre) {
+    background: #090a08;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-meta-box);
+    padding: 18px;
+    overflow: auto;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #ded8c9;
+  }
+  .prose :global(pre code) {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+  }
+</style>

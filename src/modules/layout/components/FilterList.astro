@@ -1,0 +1,144 @@
+---
+// FilterList (05-design-spec.md §8 "Filter pill"; ADR-009): a labelled
+// group of topic pills plus the rows they filter, with zero JavaScript.
+// Radio inputs give Tab to reach the group, arrow keys to move between
+// pills and Space/click to select one (native <fieldset>/radio behaviour);
+// CSS `:has()` on the wrapper shows only the rows tagged with the checked
+// value and reveals the matching empty message when nothing matches
+// (ADR-009: no `<script>`, `:has()` + radio inputs).
+//
+// Callers pass rows through the default slot, each row's own wrapping
+// element carrying `data-topics="value-one value-two"` (space-separated,
+// matching `options[].value`) — EntryRow does not set this itself since
+// topic tagging is entry data, owned by the page, not this props-only
+// component (04-stack-profile.md §1 module boundary: this component never
+// imports from `content`).
+interface FilterOption {
+  /** Matches a `data-topics` token on the rows this pill should show. */
+  value: string;
+  label: string;
+  /** Shown instead of the rows when this filter matches zero of them. */
+  emptyMessage: string;
+}
+
+interface Props {
+  /** Unique id for this filter instance (radio group name + CSS scope). */
+  id: string;
+  /** Accessible name for the pill group (visually hidden legend). */
+  groupLabel: string;
+  allLabel: string;
+  options: FilterOption[];
+}
+
+const { id, groupLabel, allLabel, options } = Astro.props;
+const groupName = `${id}-topic`;
+
+// Generated per-option CSS: :has() has no loop/selector-generation syntax of
+// its own, so the show/hide and empty-message rules are built once per
+// option here and injected as one raw stylesheet, scoped to this instance's
+// #id wrapper so more than one FilterList on a page cannot collide.
+const rules = options
+  .map(({ value }) => {
+    const radio = `input[name="${groupName}"][value="${value}"]:checked`;
+    const matchingRow = `[data-topics~="${value}"]`;
+    return `
+      #${id}:has(${radio}) .filter-rows > [data-topics]:not(${matchingRow}) {
+        display: none;
+      }
+      #${id}:has(${radio}):not(:has(${matchingRow})) .filter-empty[data-empty-for="${value}"] {
+        display: block;
+      }
+    `;
+  })
+  .join("\n");
+---
+
+<div class="filter-list" id={id}>
+  <fieldset class="filter-pills">
+    <legend class="sr-only">{groupLabel}</legend>
+    <label class="filter-pill">
+      <input type="radio" name={groupName} value="all" checked />
+      <span>{allLabel}</span>
+    </label>
+    {options.map((option) => (
+      <label class="filter-pill">
+        <input type="radio" name={groupName} value={option.value} />
+        <span>{option.label}</span>
+      </label>
+    ))}
+  </fieldset>
+
+  <div class="filter-rows">
+    <slot />
+    {options.map((option) => (
+      <p class="filter-empty" data-empty-for={option.value}>
+        {option.emptyMessage}
+      </p>
+    ))}
+  </div>
+</div>
+
+<style set:html={rules} />
+
+<style>
+  .filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 var(--space-5) 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .filter-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    border-radius: var(--radius-pill);
+    padding: 8px 10px;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-meta);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    cursor: pointer;
+    transition:
+      border-color 180ms,
+      background-color 180ms,
+      color 180ms;
+  }
+  .filter-pill input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .filter-pill:has(input:checked) {
+    border-color: var(--color-gold-accent);
+    color: var(--color-text);
+    background: var(--color-gold-soft);
+  }
+  .filter-pill:has(input:focus-visible) {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .filter-empty {
+    display: none;
+    margin: 0;
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-meta);
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+  }
+</style>
