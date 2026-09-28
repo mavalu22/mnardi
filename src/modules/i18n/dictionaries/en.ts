@@ -53,7 +53,7 @@ const en = {
     "Built with Astro. No cookies, no tracking beyond page-level analytics.",
 
   "notFound.title": "404",
-  "notFound.heading": "This page doesn't exist",
+  "notFound.heading": "This page doesn't exist.",
   "notFound.body":
     "The page you're looking for may have moved or never existed.",
   "notFound.cta": "Go to homepage",

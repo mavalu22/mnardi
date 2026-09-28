@@ -1,0 +1,59 @@
+---
+// Static 404 page (03-platform-architecture.md §8; 05-design-spec.md §11 s06). Astro serves this
+// one file for every unmatched path, including under `/pt-br/`, so it can't know the visitor's
+// locale (T-015) and shows both languages, per the s06 prototype. Uses the base layout for its
+// header and footer like every other page; `locale="en"` and `path="/"` only pick the header's
+// language (its nav/switcher links to both home pages, which is all a page with no real URL of
+// its own needs).
+import { BaseLayout } from "../modules/layout";
+import { localizePath, t } from "../modules/i18n";
+---
+
+<BaseLayout
+  locale="en"
+  title="Page not found — Matheus Nardi"
+  description="This page doesn't exist. Esta página não existe."
+  path="/"
+>
+  <div class="container not-found">
+    <h1>{t("en", "notFound.title")}</h1>
+
+    <section lang="en">
+      <h2>{t("en", "notFound.heading")}</h2>
+      <p>{t("en", "notFound.body")}</p>
+      <p>
+        <a class="btn-primary" href={localizePath("/", "en")}>
+          {t("en", "notFound.cta")}
+        </a>
+      </p>
+    </section>
+
+    <section lang="pt-BR">
+      <h2>{t("pt-br", "notFound.heading")}</h2>
+      <p>{t("pt-br", "notFound.body")}</p>
+      <p>
+        <a class="btn-primary" href={localizePath("/", "pt-br")}>
+          {t("pt-br", "notFound.cta")}
+        </a>
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-top: var(--space-7);
+    padding-bottom: var(--space-8);
+  }
+  .not-found h1 {
+    color: var(--color-danger);
+  }
+  .not-found section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+</style>

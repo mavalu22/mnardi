@@ -1,4 +1,6 @@
+import { existsSync } from "node:fs";
 import { defineConfig, envField } from "astro/config";
+import sitemap from "@astrojs/sitemap";
 // 04-stack-profile.md §10: astro.config.ts builds its `i18n` block straight from the plain locale
 // list in locales.ts (not the module's index.ts), since it runs outside the module boundary the
 // import-boundary rule protects (03 §4).
@@ -10,6 +12,26 @@ import {
 } from "./src/modules/i18n/locales";
 // eslint-disable-next-line no-restricted-imports
 import { resumeCheckIntegration } from "./src/modules/site/resumeCheckIntegration";
+
+// 03-platform-architecture.md §8: the sitemap leaves out pt-BR fallback pages (their canonical is
+// the English page). A pt-BR project/post URL is a fallback exactly when its slug has no
+// `pt-br.md` file (ADR-007); checked directly on disk (not through the `content` module, which
+// only route files may import) since this runs outside `astro:content` at sitemap-generation time.
+const PT_BR_ENTRY_URL = /^\/pt-br\/(projects|blog)\/([^/]+)\/$/;
+const collectionDir: Record<string, string> = {
+  projects: "projects",
+  blog: "posts",
+};
+
+function isFallbackSitemapUrl(pageUrl: string): boolean {
+  const path = new URL(pageUrl).pathname;
+  const match = PT_BR_ENTRY_URL.exec(path);
+  if (!match) return false;
+  const [, section, slug] = match;
+  return !existsSync(
+    `./src/content/${collectionDir[section]}/${slug}/pt-br.md`,
+  );
+}
 
 // FACTORY_SLOT: process-environment integer, unset/empty/invalid means slot 0 (04-stack-profile.md §14).
 const slot = Number.parseInt(process.env.FACTORY_SLOT ?? "", 10) || 0;
@@ -53,7 +75,22 @@ export default defineConfig({
       ]),
     ),
   },
-  integrations: [resumeCheckIntegration()],
+  integrations: [
+    resumeCheckIntegration(),
+    // 03-platform-architecture.md §8: absolute URLs from `site`, `en`/`pt-BR` alternates built by
+    // matching the locale-neutral path across the two locale prefixes, pt-BR fallback pages
+    // filtered out.
+    sitemap({
+      filter: (page) => !isFallbackSitemapUrl(page),
+      i18n: {
+        defaultLocale: localeConfigs.en.hreflang,
+        locales: {
+          [localeConfigs.en.hreflang]: localeConfigs.en.hreflang,
+          [localeConfigs["pt-br"].path]: localeConfigs["pt-br"].hreflang,
+        },
+      },
+    }),
+  ],
   // WCAG-AA-checked Shiki theme pair for Markdown code blocks (github-light/github-dark fail
   // contrast; the `-default` variants pass), used by Astro's own Markdown pipeline for both
   // project and post bodies (T-009, T-010, AC3).

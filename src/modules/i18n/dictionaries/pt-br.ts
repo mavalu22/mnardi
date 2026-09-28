@@ -55,7 +55,7 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
     "Construído com Astro. Sem cookies, sem rastreamento além das métricas por página.",
 
   "notFound.title": "404",
-  "notFound.heading": "Esta página não existe",
+  "notFound.heading": "Esta página não existe.",
   "notFound.body":
     "A página que você procura pode ter mudado de endereço ou nunca ter existido.",
   "notFound.cta": "Ir para a página inicial",
