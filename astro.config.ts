@@ -12,6 +12,7 @@ import {
 } from "./src/modules/i18n/locales";
 // eslint-disable-next-line no-restricted-imports
 import { resumeCheckIntegration } from "./src/modules/site/resumeCheckIntegration";
+import { securityHeadersIntegration } from "./security-headers";
 
 // 03-platform-architecture.md §8: the sitemap leaves out pt-BR fallback pages (their canonical is
 // the English page). A pt-BR project/post URL is a fallback exactly when its slug has no
@@ -77,6 +78,9 @@ export default defineConfig({
   },
   integrations: [
     resumeCheckIntegration(),
+    // T-017: writes vercel.json's CSP and companion security headers from the built output on
+    // every `astro build` (03-platform-architecture.md §8; threat-model.md TH-04, TH-06).
+    securityHeadersIntegration(),
     // 03-platform-architecture.md §8: absolute URLs from `site`, `en`/`pt-BR` alternates built by
     // matching the locale-neutral path across the two locale prefixes, pt-BR fallback pages
     // filtered out.
