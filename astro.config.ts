@@ -8,6 +8,8 @@ import {
   fallbackLocales,
   type Locale,
 } from "./src/modules/i18n/locales";
+// eslint-disable-next-line no-restricted-imports
+import { resumeCheckIntegration } from "./src/modules/site/resumeCheckIntegration";
 
 // FACTORY_SLOT: process-environment integer, unset/empty/invalid means slot 0 (04-stack-profile.md §14).
 const slot = Number.parseInt(process.env.FACTORY_SLOT ?? "", 10) || 0;
@@ -51,6 +53,7 @@ export default defineConfig({
       ]),
     ),
   },
+  integrations: [resumeCheckIntegration()],
   env: {
     schema: {
       PUBLIC_UMAMI_WEBSITE_ID: envField.string({
