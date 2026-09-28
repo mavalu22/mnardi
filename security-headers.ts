@@ -14,6 +14,12 @@ import type { AstroIntegration } from "astro";
 // The only third-party script the site loads (src/modules/analytics/Analytics.astro, ADR-008).
 const UMAMI_SCRIPT_ORIGIN = "https://cloud.umami.is";
 
+// Analytics.astro's <script> tag sets no `data-host-url`, so Umami's script.js falls back to its
+// default collector origin for the page-view POST (`${data-host-url || "https://gateway.umami.is"}
+// /api/send`), which differs from the script's own origin above. Both must be allowed in
+// connect-src or every page view is blocked by the CSP (B-004).
+const UMAMI_COLLECTOR_ORIGIN = "https://gateway.umami.is";
+
 // The two theme-toggle inline scripts in BaseLayout.astro (head + pre-</body>). If a third
 // distinct inline <script> ever appears in the build, that is either a mistake or a new first-party
 // script this integration does not yet allowlist, so the build must fail loudly rather than ship a
@@ -77,7 +83,7 @@ function buildContentSecurityPolicy(scriptHashes: string[]): string {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data:",
     "font-src 'self'",
-    `connect-src 'self' ${UMAMI_SCRIPT_ORIGIN}`,
+    `connect-src 'self' ${UMAMI_SCRIPT_ORIGIN} ${UMAMI_COLLECTOR_ORIGIN}`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
