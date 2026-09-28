@@ -68,6 +68,29 @@ const headAlternates = fallback
     ))}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
+    {/*
+      Theme toggle, part 1 of 2 (03-platform-architecture.md §8;
+      05-design-spec.md §2/§8): runs before first paint so a stored explicit
+      choice applies with no flash of the wrong theme, and marks <html> as
+      script-capable so the toggle button (hidden by default CSS) can appear.
+      This script's text must stay byte-for-byte identical on every page and
+      in both locales (T-017 allowlists it in a CSP by SHA-256 hash), so it
+      contains no interpolated value.
+    */}
+    <script is:inline>
+      (function () {
+        const d = document.documentElement;
+        d.setAttribute("data-js", "");
+        try {
+          const t = localStorage.getItem("theme-preference");
+          if (t === "light" || t === "dark") {
+            d.setAttribute("data-theme", t);
+          }
+        } catch {
+          /* noop */
+        }
+      })();
+    </script>
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalHref} />
@@ -87,5 +110,47 @@ const headAlternates = fallback
     </main>
 
     <Footer locale={locale} />
+
+    {/*
+      Theme toggle, part 2 of 2: wires the click handler. Reads its localized
+      labels from the button's own `data-label-*` attributes (set by
+      ThemeToggle.astro) so this script's text also stays byte-for-byte
+      identical on every page and in both locales.
+    */}
+    <script is:inline>
+      (function () {
+        const KEY = "theme-preference";
+        const ORDER = ["system", "light", "dark"];
+        const btn = document.getElementById("theme-toggle");
+        if (!btn) return;
+        function apply(state) {
+          if (state === "system") {
+            document.documentElement.removeAttribute("data-theme");
+          } else {
+            document.documentElement.setAttribute("data-theme", state);
+          }
+          btn.setAttribute("data-state", state);
+          const label = btn.querySelector(".theme-toggle-label");
+          if (label)
+            label.textContent = btn.getAttribute("data-label-" + state) || "";
+        }
+        let current = "system";
+        try {
+          current = localStorage.getItem(KEY) || "system";
+        } catch {
+          /* noop */
+        }
+        apply(current);
+        btn.addEventListener("click", function () {
+          current = ORDER[(ORDER.indexOf(current) + 1) % ORDER.length];
+          try {
+            localStorage.setItem(KEY, current);
+          } catch {
+            /* noop */
+          }
+          apply(current);
+        });
+      })();
+    </script>
   </body>
 </html>

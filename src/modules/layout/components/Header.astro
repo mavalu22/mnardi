@@ -5,6 +5,7 @@
 // that wraps as a whole at narrow widths — nothing is hidden, no hamburger.
 import { localizePath, t, type Locale } from "../../i18n";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
+import ThemeToggle from "./ThemeToggle.astro";
 
 interface Props {
   locale: Locale;
@@ -29,6 +30,7 @@ const { locale, path } = Astro.props;
     </nav>
     <div class="header-controls">
       <LanguageSwitcher locale={locale} path={path} />
+      <ThemeToggle locale={locale} />
     </div>
   </div>
 </header>
