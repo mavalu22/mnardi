@@ -1,0 +1,209 @@
+---
+// Temporary style-check content, rendered inside BaseLayout's <main> on the
+// placeholder Home routes. Replaced by the real Home page in a later task
+// (src/modules/home/). Filename starts with "_" so Astro does not treat it
+// as a route.
+import { Card, EmptyState, FallbackNotice } from "../modules/layout";
+
+const colorSwatches = [
+  "color-brand-600",
+  "color-brand-700",
+  "color-brand-100",
+  "color-accent-600",
+  "color-accent-700",
+  "color-accent-100",
+  "color-success",
+  "color-warning",
+  "color-danger",
+  "color-info",
+  "color-surface-page",
+  "color-surface-raised",
+  "color-surface-sunken",
+  "color-border-default",
+  "color-border-input",
+  "color-text-primary",
+  "color-text-secondary",
+  "color-text-disabled",
+  "color-focus-ring",
+];
+
+const spacingTokens = [
+  "space-1",
+  "space-2",
+  "space-3",
+  "space-4",
+  "space-5",
+  "space-6",
+  "space-7",
+  "space-8",
+];
+
+const radiusTokens = ["radius-sm", "radius-md", "radius-lg", "radius-full"];
+
+const typeScale = [
+  { token: "font-size-xs", label: "xs — captions" },
+  { token: "font-size-sm", label: "sm — secondary text" },
+  { token: "font-size-base", label: "base — body" },
+  { token: "font-size-lg", label: "lg — lead" },
+  { token: "font-size-xl", label: "xl — h4" },
+  { token: "font-size-2xl", label: "2xl — h3" },
+  { token: "font-size-3xl", label: "3xl — h2" },
+  { token: "font-size-4xl", label: "4xl — h1" },
+];
+---
+
+<div class="container">
+  <h1>Design system base</h1>
+  <p class="text-secondary">
+    Temporary style check: token swatches and one instance of each shared
+    component. Replaced by the real Home page in a later task.
+  </p>
+
+  <h2>Color tokens</h2>
+  <ul class="swatch-grid">
+    {colorSwatches.map((token) => (
+      <li class="swatch">
+        <span class="swatch-color" style={`background: var(--${token})`} />
+        <code class="text-xs">{`--${token}`}</code>
+      </li>
+    ))}
+  </ul>
+
+  <h2>Typography</h2>
+  <ul class="type-scale">
+    {typeScale.map(({ token, label }) => (
+      <li style={`font-size: var(--${token})`}>
+        {label} <code class="text-xs">{`--${token}`}</code>
+      </li>
+    ))}
+  </ul>
+  <p class="mono text-sm">font-family-mono sample: const answer = 42;</p>
+
+  <h2>Spacing</h2>
+  <ul class="spacing-scale">
+    {spacingTokens.map((token) => (
+      <li>
+        <span class="spacing-bar" style={`width: var(--${token})`} />
+        <code class="text-xs">{`--${token}`}</code>
+      </li>
+    ))}
+  </ul>
+
+  <h2>Radius and elevation</h2>
+  <ul class="radius-grid">
+    {radiusTokens.map((token) => (
+      <li class="radius-box" style={`border-radius: var(--${token})`}>
+        <code class="text-xs">{`--${token}`}</code>
+      </li>
+    ))}
+  </ul>
+  <div class="elevation-grid">
+    <div class="elevation-box" style="box-shadow: var(--elevation-sm)">
+      <code class="text-xs">--elevation-sm</code>
+    </div>
+    <div class="elevation-box" style="box-shadow: var(--elevation-md)">
+      <code class="text-xs">--elevation-md</code>
+    </div>
+  </div>
+
+  <h2>Shared components</h2>
+
+  <h3>Card</h3>
+  <ul class="card-demo">
+    <li>
+      <Card href="#" heading="Sample project" eyebrow="// Top project">
+        A short one-line description of a project card, matching the shared Card
+        component.
+      </Card>
+    </li>
+  </ul>
+
+  <h3>Empty state</h3>
+  <EmptyState>No projects here yet — check back soon.</EmptyState>
+
+  <h3>Fallback notice</h3>
+  <FallbackNotice>
+    This page isn't translated into Portuguese yet — showing the English
+    version.
+  </FallbackNotice>
+</div>
+
+<style>
+  main {
+    padding: var(--space-7) 0;
+  }
+
+  .swatch-grid,
+  .type-scale,
+  .spacing-scale,
+  .radius-grid,
+  .card-demo {
+    list-style: none;
+    margin: 0 0 var(--space-6) 0;
+    padding: 0;
+  }
+
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-4);
+  }
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .swatch-color {
+    display: block;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-default);
+  }
+
+  .type-scale li {
+    margin-bottom: var(--space-2);
+  }
+
+  .spacing-scale li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  .spacing-bar {
+    display: block;
+    height: var(--space-3);
+    background: var(--color-brand-fill);
+    border-radius: var(--radius-sm);
+  }
+
+  .radius-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+  .radius-box,
+  .elevation-box {
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-default);
+    text-align: center;
+    padding: var(--space-2);
+  }
+  .elevation-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    margin-bottom: var(--space-6);
+  }
+
+  .card-demo {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--space-5);
+  }
+</style>

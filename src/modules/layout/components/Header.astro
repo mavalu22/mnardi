@@ -1,0 +1,96 @@
+---
+// Site header: wordmark, primary nav (Projects, Blog) and the header-controls
+// group (language switcher; the theme toggle is added by T-011 alongside it,
+// 05-design-spec.md §9 xs layout note). Every group stays in one flex row
+// that wraps as a whole at narrow widths — nothing is hidden, no hamburger.
+import { localizePath, t, type Locale } from "../../i18n";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+
+interface Props {
+  locale: Locale;
+  /** The current page's path (may already carry a locale prefix). */
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="container">
+    <a class="wordmark" href={localizePath("/", locale)}>
+      <span class="wordmark-brace">{"{"}</span> Matheus Nardi{" "}
+      <span class="wordmark-brace">{"}"}</span>
+    </a>
+    <nav class="primary-nav" aria-label={t(locale, "nav.ariaLabel")}>
+      <a href={localizePath("/projects/", locale)}>
+        {t(locale, "nav.projects")}
+      </a>
+      <a href={localizePath("/blog/", locale)}>{t(locale, "nav.blog")}</a>
+    </nav>
+    <div class="header-controls">
+      <LanguageSwitcher locale={locale} path={path} />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    border-bottom: 1px solid var(--color-border-default);
+    padding: var(--space-4) 0;
+  }
+  .site-header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--gradient-accent-bar);
+    opacity: 0.7;
+  }
+  .site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .wordmark {
+    font-family: var(--font-family-mono);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+    letter-spacing: -0.01em;
+    color: var(--color-brand-text);
+    text-decoration: none;
+  }
+  .wordmark:hover {
+    text-decoration: underline;
+  }
+  .wordmark-brace {
+    color: var(--color-accent-text);
+  }
+
+  .primary-nav {
+    display: flex;
+    gap: var(--space-5);
+    align-items: center;
+  }
+  .primary-nav a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+  .primary-nav a:hover {
+    color: var(--color-brand-text);
+    text-decoration: underline;
+  }
+</style>

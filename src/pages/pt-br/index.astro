@@ -1,0 +1,16 @@
+---
+// pt-BR home. Same temporary content as the English home, rendered through
+// BaseLayout with the pt-BR locale; replaced by the real Home page in a
+// later task (src/modules/home/).
+import { BaseLayout } from "../../modules/layout";
+import TempStyleCheck from "../_temp-style-check.astro";
+---
+
+<BaseLayout
+  locale="pt-br"
+  path="/pt-br/"
+  title="mnardi.com — verificação do design system"
+  description="Página temporária de verificação do design system do mnardi.com: amostras de tokens e componentes compartilhados."
+>
+  <TempStyleCheck />
+</BaseLayout>

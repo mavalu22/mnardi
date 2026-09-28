@@ -1,0 +1,72 @@
+---
+// Header control: EN / PT-BR links, the current locale marked with
+// aria-current="page", each pointing to the same page in the other locale
+// (05-design-spec.md §8 "Language switcher", §11 s01).
+import {
+  locales,
+  localizePath,
+  t,
+  type DictionaryKey,
+  type Locale,
+} from "../../i18n";
+
+interface Props {
+  locale: Locale;
+  /** The current page's path (may already carry a locale prefix). */
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+
+const labelKeys: Record<Locale, DictionaryKey> = {
+  en: "languageSwitcher.en",
+  "pt-br": "languageSwitcher.ptBr",
+};
+---
+
+<nav
+  class="language-switcher"
+  aria-label={t(locale, "languageSwitcher.ariaLabel")}
+>
+  {locales.map((candidate, index) => (
+    <>
+      {index > 0 && (
+        <span class="divider" aria-hidden="true">
+          /
+        </span>
+      )}
+      <a
+        href={localizePath(path, candidate)}
+        aria-current={candidate === locale ? "page" : undefined}
+      >
+        {t(locale, labelKeys[candidate])}
+      </a>
+    </>
+  ))}
+</nav>
+
+<style>
+  .language-switcher {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+  .language-switcher a {
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+  }
+  .language-switcher a:hover {
+    text-decoration: underline;
+  }
+  .language-switcher a[aria-current="page"] {
+    color: var(--color-brand-text);
+    font-weight: var(--font-weight-semibold);
+  }
+  .language-switcher .divider {
+    color: var(--color-border-input);
+  }
+</style>

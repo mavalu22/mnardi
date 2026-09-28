@@ -1,0 +1,88 @@
+---
+// Shared page shell: head metadata (title, description, canonical, hreflang
+// alternates, Open Graph tags), skip link, header, <main> and footer
+// (03-platform-architecture.md §4, §8; 05-design-spec.md §12). Every page
+// renders through this layout.
+import { alternates, localizePath, t, type Locale } from "../i18n";
+import { siteProfile } from "../site";
+import Header from "./components/Header.astro";
+import Footer from "./components/Footer.astro";
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  /** The current page's path, including any locale prefix it already has. */
+  path: string;
+  /**
+   * True when this page's main content is an English fallback served at a
+   * pt-BR URL (ADR-007): the canonical URL points at the English page and no
+   * pt-BR hreflang alternate is emitted, so search engines don't index the
+   * pt-BR URL as a duplicate of content that isn't actually translated.
+   */
+  fallback?: boolean;
+  ogType?: "website" | "article";
+}
+
+const {
+  locale,
+  title,
+  description,
+  path,
+  fallback = false,
+  ogType = "website",
+} = Astro.props;
+
+const allAlternates = alternates(path);
+
+const currentHref = `${siteProfile.siteUrl}${localizePath(path, locale)}`;
+const htmlLang =
+  allAlternates.find(
+    (alternate) =>
+      alternate.href === currentHref && alternate.hreflang !== "x-default",
+  )?.hreflang ?? locale;
+
+const canonicalLocale: Locale = fallback ? "en" : locale;
+const canonicalHref = `${siteProfile.siteUrl}${localizePath(path, canonicalLocale)}`;
+
+const ptBrHref = `${siteProfile.siteUrl}${localizePath(path, "pt-br")}`;
+const headAlternates = fallback
+  ? allAlternates.filter((alternate) => alternate.href !== ptBrHref)
+  : allAlternates;
+---
+
+<html lang={htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalHref} />
+    {headAlternates.map((alternate) => (
+      <link
+        rel="alternate"
+        hreflang={alternate.hreflang}
+        href={alternate.href}
+      />
+    ))}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalHref} />
+    <meta property="og:type" content={ogType} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      {t(locale, "nav.skipLink")}
+    </a>
+
+    <Header locale={locale} path={path} />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer locale={locale} />
+  </body>
+</html>
