@@ -2,7 +2,7 @@
 // defined in collections.ts. Imports `astro:content` (04-stack-profile.md §1, §12: only `content`
 // calls `getCollection`); this is the module's only caller of it besides collections.ts.
 
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import { locales, type Locale } from "../i18n";
 import { assertConsistentLocales } from "./consistency";
 import { groupByLocale } from "./grouping";
@@ -156,6 +156,59 @@ export async function getProject(
   const groups = await loadProjectGroups();
   const group = groups.find((candidate) => candidate.slug === slug);
   return group ? toProject(group, locale) : undefined;
+}
+
+/** What `<Content />` needs to render an entry's Markdown body via Astro's built-in pipeline. */
+export type RenderedBody = {
+  Content: Awaited<ReturnType<typeof render>>["Content"];
+};
+
+/**
+ * Resolves `slug`/`locale` to the raw `CollectionEntry` Astro's `render()` needs (English fallback
+ * applied the same way `toProject`/`toPost` do), then renders it through Astro's own Markdown
+ * pipeline (remark/rehype, Shiki syntax highlighting). Only this module calls `astro:content`'s
+ * `render()` (03 §4).
+ */
+async function renderEntry<C extends "projects" | "posts">(
+  collection: C,
+  entries: readonly CollectionEntry<C>[],
+  groups: readonly ValidatedGroup<CollectionEntry<C>["data"]>[],
+  slug: string,
+  locale: Locale,
+): Promise<RenderedBody | undefined> {
+  const group = groups.find((candidate) => candidate.slug === slug);
+  if (!group) {
+    return undefined;
+  }
+  const { value } = resolveLocaleData(locale, group.en, group.ptBr);
+  const entry = entries.find((candidate) => candidate.id === value.id);
+  if (!entry) {
+    throw new Error(
+      `content: no raw entry found for id "${value.id}" in collection "${collection}" (internal error)`,
+    );
+  }
+  const { Content } = await render(entry);
+  return { Content };
+}
+
+/** Renders the project for `slug` in `locale` via Astro's built-in Markdown pipeline. */
+export async function renderProject(
+  slug: string,
+  locale: Locale,
+): Promise<RenderedBody | undefined> {
+  const entries = await getCollection("projects");
+  const groups = await loadProjectGroups();
+  return renderEntry("projects", entries, groups, slug, locale);
+}
+
+/** Renders the post for `slug` in `locale` via Astro's built-in Markdown pipeline. */
+export async function renderPost(
+  slug: string,
+  locale: Locale,
+): Promise<RenderedBody | undefined> {
+  const entries = await getCollection("posts");
+  const groups = await loadPostGroups();
+  return renderEntry("posts", entries, groups, slug, locale);
 }
 
 /** Every post, newest `date` first (03 §5). */

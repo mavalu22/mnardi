@@ -1,0 +1,229 @@
+---
+// Project detail page (03-platform-architecture.md §4 "<ProjectPage entry>";
+// 05-design-spec.md §11 s03). Renders the eyebrow, title, optional cover
+// image, tech-stack tags, repo/demo links, optional date and the Markdown
+// body, wrapping the entry's own content in a `lang="en"` region with a
+// fallback notice above it when the entry has no pt-BR translation
+// (ADR-007, design spec §12).
+import { Image } from "astro:assets";
+import { BaseLayout, FallbackNotice } from "../layout";
+import { formatDate, localizePath, t } from "../i18n";
+import { renderProject, type Project } from "../content";
+
+interface Props {
+  entry: Project;
+}
+
+const { entry } = Astro.props;
+
+const path = localizePath(`/projects/${entry.slug}/`, entry.locale);
+const rendered = await renderProject(entry.slug, entry.locale);
+if (!rendered) {
+  throw new Error(
+    `ProjectPage: no renderable entry for slug "${entry.slug}" (internal error)`,
+  );
+}
+const { Content } = rendered;
+
+// Content-schema URLs (`links.repo`/`links.demo`) are validated with `z.string().url()`, which
+// accepts any scheme (T-004 SEC finding). Only render a URL as a real link when it is http(s).
+const isHttpUrl = (url: string) => /^https?:\/\//.test(url);
+const repoHref =
+  entry.links.repo && isHttpUrl(entry.links.repo)
+    ? entry.links.repo
+    : undefined;
+const demoHref =
+  entry.links.demo && isHttpUrl(entry.links.demo)
+    ? entry.links.demo
+    : undefined;
+
+const contentLang = entry.isFallback ? "en" : undefined;
+---
+
+<BaseLayout
+  locale={entry.locale}
+  title={`${entry.title} — Matheus Nardi`}
+  description={entry.description}
+  path={path}
+  fallback={entry.isFallback}
+>
+  <div class="container">
+    <p class="text-sm">
+      <a href={localizePath("/projects/", entry.locale)}>
+        &larr; {t(entry.locale, "project.backToProjects")}
+      </a>
+    </p>
+
+    {entry.isFallback && (
+      <FallbackNotice>
+        {t(entry.locale, "fallbackNotice.message")}
+      </FallbackNotice>
+    )}
+
+    <span class="eyebrow">{t(entry.locale, "eyebrow.project")}</span>
+
+    <div lang={contentLang}>
+      {entry.cover && (
+        <Image
+          class="cover-image"
+          src={entry.cover}
+          alt={entry.coverAlt ?? ""}
+          format="webp"
+        />
+      )}
+
+      <h1>{entry.title}</h1>
+      <span class="title-accent" aria-hidden="true"></span>
+
+      {entry.date && (
+        <p class="text-sm text-secondary">
+          <time datetime={entry.date.toISOString().slice(0, 10)}>
+            {formatDate(entry.date, entry.locale)}
+          </time>
+        </p>
+      )}
+
+      <ul
+        class="tag-list"
+        aria-label={t(entry.locale, "project.techStackAriaLabel")}
+      >
+        {entry.techStack.map((tech) => (
+          <li class="tag">{tech}</li>
+        ))}
+      </ul>
+
+      {(repoHref || demoHref) && (
+        <div class="entry-links">
+          {repoHref && (
+            <a
+              class="btn btn-secondary"
+              href={repoHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t(entry.locale, "project.repoLink")}
+              <span class="sr-only">
+                {t(entry.locale, "a11y.opensInNewTab")}
+              </span>
+            </a>
+          )}
+          {demoHref && (
+            <a
+              class="btn btn-secondary"
+              href={demoHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t(entry.locale, "project.demoLink")}
+              <span class="sr-only">
+                {t(entry.locale, "a11y.opensInNewTab")}
+              </span>
+            </a>
+          )}
+        </div>
+      )}
+
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .cover-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-input);
+    margin-bottom: var(--space-5);
+  }
+
+  .title-accent {
+    display: block;
+    width: 4rem;
+    height: 3px;
+    margin-bottom: var(--space-5);
+    background: var(--gradient-accent-bar);
+    border-radius: var(--radius-sm);
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0 0 var(--space-5) 0;
+    padding: 0;
+  }
+  .tag {
+    background: var(--color-tag-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-sm);
+    padding: var(--space-1) var(--space-3);
+  }
+
+  .entry-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    border: 1px solid var(--color-border-input);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    transition: color 150ms;
+  }
+  .btn-secondary:hover {
+    color: var(--color-brand-text);
+  }
+
+  .prose :global(p) {
+    margin: 0 0 var(--space-4) 0;
+  }
+  .prose :global(h2) {
+    margin-top: var(--space-6);
+  }
+  .prose :global(h3) {
+    margin-top: var(--space-5);
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 var(--space-4) 0;
+    padding-left: var(--space-5);
+  }
+  .prose :global(li) {
+    margin-bottom: var(--space-2);
+  }
+  .prose :global(code) {
+    font-family: var(--font-family-mono);
+    background: var(--color-surface-sunken);
+    border-radius: var(--radius-sm);
+    padding: 0.1em 0.35em;
+    font-size: 0.9em;
+  }
+  .prose :global(pre) {
+    background: var(--color-surface-sunken);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    overflow-x: auto;
+    margin: 0 0 var(--space-4) 0;
+  }
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+</style>

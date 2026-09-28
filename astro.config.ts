@@ -54,6 +54,16 @@ export default defineConfig({
     ),
   },
   integrations: [resumeCheckIntegration()],
+  // WCAG-AA-checked Shiki theme pair for Markdown code blocks (github-light/github-dark fail
+  // contrast; the `-default` variants pass, consistent with T-010's blog-post rendering).
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: "github-light-default",
+        dark: "github-dark-default",
+      },
+    },
+  },
   env: {
     schema: {
       PUBLIC_UMAMI_WEBSITE_ID: envField.string({

@@ -1,0 +1,21 @@
+---
+// English project detail route. Thin route file (04-stack-profile.md §16): paths come from
+// `projectPaths()`, the only content it renders is `ProjectPage`.
+import { getProject, projectPaths } from "../../modules/content";
+import { ProjectPage } from "../../modules/projects";
+
+export async function getStaticPaths() {
+  const paths = await projectPaths();
+  return paths
+    .filter((path) => path.locale === "en")
+    .map((path) => ({ params: { slug: path.slug } }));
+}
+
+const { slug } = Astro.params as { slug: string };
+const entry = await getProject(slug, "en");
+if (!entry) {
+  throw new Error(`project "${slug}": no entry found (internal error)`);
+}
+---
+
+<ProjectPage entry={entry} />

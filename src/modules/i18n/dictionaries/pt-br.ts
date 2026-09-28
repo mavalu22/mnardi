@@ -25,6 +25,8 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
 
   "project.techStackAriaLabel": "Tecnologias utilizadas",
   "project.backToProjects": "Voltar para Projetos",
+  "project.repoLink": "Repositório",
+  "project.demoLink": "Demonstração",
   "post.backToBlog": "Voltar para o Blog",
   "post.published": "Publicado em",
   "post.updated": "Atualizado em",

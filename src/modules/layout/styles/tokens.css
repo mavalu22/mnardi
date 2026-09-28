@@ -275,3 +275,26 @@
   --elevation-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
   --elevation-md: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+/*
+  Shiki (Astro's Markdown syntax highlighter, astro.config.ts `markdown.shikiConfig`)
+  emits both a light and a dark theme per code element as inline `color`/
+  `background-color` styles (light) plus inert `--shiki-dark`/`--shiki-dark-bg` custom
+  properties (dark). Inline styles win over any selector's specificity, so `!important`
+  is required here to swap in the dark colors; that's scoped tightly to Shiki's own
+  `.astro-code` output, using the same "system" + manual-toggle selector pair as the
+  rest of this file, so code blocks (project/post pages, T-010) follow dark mode too.
+*/
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .astro-code,
+  :root:not([data-theme="light"]) .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+  }
+}
+
+:root[data-theme="dark"] .astro-code,
+:root[data-theme="dark"] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}

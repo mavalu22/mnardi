@@ -23,6 +23,8 @@ const en = {
 
   "project.techStackAriaLabel": "Tech stack",
   "project.backToProjects": "Back to Projects",
+  "project.repoLink": "Repository",
+  "project.demoLink": "Live demo",
   "post.backToBlog": "Back to Blog",
   "post.published": "Published",
   "post.updated": "Updated",

@@ -1,0 +1,22 @@
+---
+// pt-BR project detail route. Same shape as the English route
+// (04-stack-profile.md §16); `getProject` resolves to the English fallback
+// (with `isFallback: true`) when the entry has no `pt-br.md` (ADR-007).
+import { getProject, projectPaths } from "../../../modules/content";
+import { ProjectPage } from "../../../modules/projects";
+
+export async function getStaticPaths() {
+  const paths = await projectPaths();
+  return paths
+    .filter((path) => path.locale === "pt-br")
+    .map((path) => ({ params: { slug: path.slug } }));
+}
+
+const { slug } = Astro.params as { slug: string };
+const entry = await getProject(slug, "pt-br");
+if (!entry) {
+  throw new Error(`project "${slug}": no entry found (internal error)`);
+}
+---
+
+<ProjectPage entry={entry} />
