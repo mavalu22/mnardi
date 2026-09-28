@@ -1,0 +1,12 @@
+---
+// pt-BR blog listing route (05-design-spec.md §11 s04; T-013 AC1-AC4). Posts come only from
+// `getPosts()` (content module), already newest-first; a post without a `pt-br.md` resolves to
+// its English title and summary (ADR-007), which `BlogListPage` marks with `lang="en"`. The
+// page renders only `BlogListPage` (blog module).
+import { getPosts } from "../../../modules/content";
+import { BlogListPage } from "../../../modules/blog";
+
+const posts = await getPosts("pt-br");
+---
+
+<BlogListPage locale="pt-br" posts={posts} path="/pt-br/blog/" />

@@ -1,0 +1,11 @@
+---
+// English blog listing route (05-design-spec.md §11 s04; T-013 AC1, AC2, AC4). Posts come only
+// from `getPosts()` (content module), already newest-first; the page renders only
+// `BlogListPage` (blog module).
+import { getPosts } from "../../modules/content";
+import { BlogListPage } from "../../modules/blog";
+
+const posts = await getPosts("en");
+---
+
+<BlogListPage locale="en" posts={posts} path="/blog/" />
