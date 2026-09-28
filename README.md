@@ -113,4 +113,6 @@ The project is hosted on Vercel (Hobby plan), connected to this GitHub repositor
 - **Preview:** every push to any other branch gets its own `*.vercel.app` preview URL, with analytics disabled and `X-Robots-Tag: noindex`, so a change can be checked before merging.
 - **Rollback:** in the Vercel dashboard, open the project's **Deployments** tab and click **Promote to Production** on any earlier successful deployment. Alternatively, revert the offending commit on `main` and push; that triggers a normal new deployment.
 
+`vercel.json` (security headers, including the Content Security Policy) is generated at build time from the built HTML and committed as part of that build's output — don't hand-edit it; change the source in the security-headers build integration and run `pnpm build` instead.
+
 The one-time setup of the Vercel project, the `mnardi.com` custom domain and the Umami website needs the owner's own Vercel, registrar and Umami accounts, so it isn't part of this repository.
