@@ -5,3 +5,10 @@
 /CLAUDE.md
 /AGENTS.md
 # <<< whole-team <<<
+
+dist/
+.astro/
+node_modules/
+.vercel/
+.env
+

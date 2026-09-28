@@ -1,0 +1,4 @@
+factory/
+dist/
+.astro/
+pnpm-lock.yaml

@@ -1,0 +1,8 @@
+strictDepBuilds: true # install fails if a new dependency has an unreviewed build script
+allowBuilds: # pnpm >= 10.26
+  esbuild: true
+  sharp: true
+minimumReleaseAge: 1440 # minutes; don't install versions published less than a day ago
+minimumReleaseAgeExclude: # sharp@0.35.5 (and its platform binaries) is the version pinned by 02-stack.md §2 (Astro 7.3.5 expects ^0.35.4); remove once it ages past 1440 minutes
+  - sharp
+  - "@img/*"
