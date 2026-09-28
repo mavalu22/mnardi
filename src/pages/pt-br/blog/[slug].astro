@@ -1,0 +1,23 @@
+---
+// pt-BR post detail route (05-design-spec.md §11 s05; T-010 AC1, AC4, AC6). Paths come only from
+// `postPaths()` (content module); the page renders only `PostPage` (blog module). `getPost`
+// resolves to the English fallback when no pt-br.md exists yet (ADR-007), and `PostPage` shows
+// the fallback notice in that case.
+import { getPost, postPaths } from "../../../modules/content";
+import { PostPage } from "../../../modules/blog";
+
+export async function getStaticPaths() {
+  const paths = await postPaths();
+  return paths
+    .filter((entry) => entry.locale === "pt-br")
+    .map((entry) => ({ params: { slug: entry.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = await getPost(slug, "pt-br");
+if (!post) {
+  throw new Error(`blog: no post found for slug "${slug}" (internal error)`);
+}
+---
+
+<PostPage post={post} path={`/pt-br/blog/${slug}/`} />

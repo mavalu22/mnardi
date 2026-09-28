@@ -1,0 +1,23 @@
+---
+// English post detail route (05-design-spec.md §11 s05; T-010 AC1, AC6). Paths come only from
+// `postPaths()` (content module); the page renders only `PostPage` (blog module).
+import { getPost, postPaths } from "../../modules/content";
+import { PostPage } from "../../modules/blog";
+
+export async function getStaticPaths() {
+  const paths = await postPaths();
+  return paths
+    .filter((entry) => entry.locale === "en")
+    .map((entry) => ({ params: { slug: entry.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = await getPost(slug, "en");
+if (!post) {
+  throw new Error(
+    `blog: no English post found for slug "${slug}" (internal error)`,
+  );
+}
+---
+
+<PostPage post={post} path={`/blog/${slug}/`} />

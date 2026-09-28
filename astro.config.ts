@@ -55,7 +55,8 @@ export default defineConfig({
   },
   integrations: [resumeCheckIntegration()],
   // WCAG-AA-checked Shiki theme pair for Markdown code blocks (github-light/github-dark fail
-  // contrast; the `-default` variants pass, consistent with T-010's blog-post rendering).
+  // contrast; the `-default` variants pass), used by Astro's own Markdown pipeline for both
+  // project and post bodies (T-009, T-010, AC3).
   markdown: {
     shikiConfig: {
       themes: {

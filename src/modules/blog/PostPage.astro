@@ -1,0 +1,113 @@
+---
+// Post detail screen (05-design-spec.md §11 s05; 03-platform-architecture.md §4:
+// `<PostPage entry>`, depends on `layout`, `content`, `i18n`). Renders a post's eyebrow, title,
+// dates, full Markdown body (headings, lists, links, Shiki-highlighted code blocks, via the
+// `content` module's `renderPost()` and Astro's own built-in Markdown pipeline) and, for a
+// pt-BR page falling back to English (ADR-007), the fallback notice and a `lang="en"` wrapper
+// around the English content.
+import { BaseLayout, FallbackNotice } from "../layout";
+import { formatDate, localizePath, t, type Locale } from "../i18n";
+import { renderPost, type Post } from "../content";
+import { isoDate } from "./isoDate";
+
+interface Props {
+  post: Post;
+  /** The current page's path, including any locale prefix it already has. */
+  path: string;
+}
+
+const { post, path } = Astro.props;
+const { locale } = post;
+// The post's own language: English whenever this pt-BR page shows the English fallback
+// (ADR-007), otherwise the page's locale.
+const contentLocale: Locale = post.isFallback ? "en" : locale;
+const rendered = await renderPost(post.slug, locale);
+if (!rendered) {
+  throw new Error(
+    `PostPage: no renderable entry for slug "${post.slug}" (internal error)`,
+  );
+}
+const { Content } = rendered;
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${post.title} — Matheus Nardi`}
+  description={post.summary}
+  path={path}
+  fallback={post.isFallback}
+  ogType="article"
+>
+  <div class="container post-detail">
+    <p class="text-sm">
+      <a href={localizePath("/blog/", locale)}>
+        &larr; {t(locale, "post.backToBlog")}
+      </a>
+    </p>
+
+    <span class="eyebrow">{t(locale, "eyebrow.post")}</span>
+
+    {post.isFallback && (
+      <div class="fallback-notice-wrap">
+        <FallbackNotice>{t(locale, "fallbackNotice.message")}</FallbackNotice>
+      </div>
+    )}
+
+    <div lang={post.isFallback ? "en" : undefined}>
+      <h1>{post.title}</h1>
+      <p class="text-sm text-secondary post-dates">
+        {t(locale, "post.published")}{" "}
+        <time datetime={isoDate(post.date)}>
+          {formatDate(post.date, contentLocale)}
+        </time>
+        {post.updated && (
+          <>
+            {" "}
+            &middot; {t(locale, "post.updated")}{" "}
+            <time datetime={isoDate(post.updated)}>
+              {formatDate(post.updated, contentLocale)}
+            </time>
+          </>
+        )}
+      </p>
+
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .post-detail {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-8);
+  }
+  .fallback-notice-wrap {
+    margin-bottom: var(--space-5);
+  }
+  .post-dates {
+    margin-top: var(--space-2);
+  }
+  .prose {
+    margin-top: var(--space-6);
+    max-width: 68ch;
+  }
+  .prose :global(pre) {
+    background: var(--color-surface-sunken);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    font-size: var(--font-size-sm);
+  }
+  .prose :global(code) {
+    background: var(--color-surface-sunken);
+    padding: 0.1em 0.35em;
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+  }
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+</style>
