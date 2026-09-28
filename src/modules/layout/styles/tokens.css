@@ -1,0 +1,277 @@
+/*
+  Design tokens: color, typography, spacing, radius and elevation.
+  Values from factory/input/05-design-spec.md sections 3-6.
+  Plain CSS custom properties, no preprocessor: prefers-color-scheme drives
+  the "system" state, [data-theme] attribute overrides force an explicit
+  choice (05-design-spec.md §2/§8).
+*/
+
+:root {
+  /* Color - brand & neutral (light theme defaults) */
+  --color-brand-600: #1d4ed8;
+  --color-brand-700: #1e3a8a;
+  --color-brand-100: #dbeafe;
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f9fafb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-300: #d1d5db;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-500: #6b7280;
+  --color-neutral-600: #4b5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1f2937;
+  --color-neutral-900: #111827;
+  --color-neutral-950: #0b0e14;
+
+  /* Semantic */
+  --color-success: #15803d;
+  --color-warning: #92400e;
+  --color-danger: #b91c1c;
+  --color-info: var(--color-brand-600);
+
+  /* Surface & text (light) */
+  --color-surface-page: var(--color-neutral-0);
+  --color-surface-raised: var(--color-neutral-50);
+  --color-surface-sunken: var(--color-neutral-100);
+  --color-border-default: var(--color-neutral-200);
+  --color-border-input: var(--color-neutral-500);
+  --color-text-primary: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-disabled: var(--color-neutral-400);
+  --color-text-inverse: var(--color-neutral-0);
+  --color-focus-ring: var(--color-brand-600);
+  --color-brand-fill: var(--color-brand-600);
+  --color-brand-fill-hover: var(--color-brand-700);
+  --color-brand-fill-active: var(--color-brand-700);
+  --color-brand-text: var(--color-brand-600);
+  --color-tag-bg: var(--color-brand-100);
+
+  /* Accent (second hue, decorative/large-text use only — see design spec §3) */
+  --color-accent-600: #0d9488;
+  --color-accent-700: #115e59;
+  --color-accent-100: #ccfbf1;
+  --color-accent-fill: var(--color-accent-600);
+  --color-accent-fill-hover: var(--color-accent-700);
+  --color-accent-text: var(--color-accent-600);
+  --color-accent-tint: var(--color-accent-100);
+  --gradient-accent-bar: linear-gradient(
+    90deg,
+    var(--color-brand-fill),
+    var(--color-accent-fill)
+  );
+  --gradient-hero-glow:
+    radial-gradient(circle at 15% 20%, rgba(29, 78, 216, 0.1), transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(13, 148, 136, 0.1), transparent 55%);
+
+  /* Typography */
+  --font-family-sans:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  --font-family-mono:
+    ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono",
+    monospace;
+
+  --font-size-xs: 0.75rem;
+  --line-height-xs: 1rem;
+  --font-size-sm: 0.875rem;
+  --line-height-sm: 1.25rem;
+  --font-size-base: 1rem;
+  --line-height-base: 1.5rem;
+  --font-size-lg: 1.125rem;
+  --line-height-lg: 1.75rem;
+  --font-size-xl: 1.25rem;
+  --line-height-xl: 1.75rem;
+  --font-size-2xl: 1.5rem;
+  --line-height-2xl: 2rem;
+  --font-size-3xl: 1.875rem;
+  --line-height-3xl: 2.25rem;
+  --font-size-4xl: clamp(1.75rem, 4vw + 1rem, 2.75rem);
+  --line-height-4xl: 1.15;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing (4px base unit) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Layout */
+  --container-max-width: 1120px;
+  --container-padding: var(--space-4);
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Elevation */
+  --elevation-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --elevation-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* Icons (§7, kept alongside for component use) */
+  --icon-size-sm: 16px;
+  --icon-size-md: 20px;
+  --icon-size-lg: 24px;
+  /* Not in 05-design-spec.md §7 (16/20/24px only); added for the empty-state
+     icon, which needs a larger size than any existing token. Flag for the
+     spec to be updated to include this size. */
+  --icon-size-xl: 2.5rem;
+}
+
+/*
+  Dark theme values are applied two ways so the manual toggle (design spec
+  §2/§8) and the OS preference can both drive them without duplicating
+  logic in script: the media query covers "system" (the default, no
+  data-theme attribute set), and the [data-theme="dark"] attribute
+  (written by the toggle's inline script, added by a later task) forces
+  dark regardless of the OS setting. [data-theme="light"] forces light
+  back even if the OS is dark. Same variable list, so keep the two dark
+  blocks in sync.
+*/
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-brand-400: #7da6ff;
+    --color-brand-300: #a9c4ff;
+    --color-accent-400: #2dd4bf;
+    --color-accent-300: #5eead4;
+
+    --color-surface-page: #0b0e14;
+    --color-surface-raised: #12161f;
+    --color-surface-sunken: #171c27;
+    --color-border-default: #262b36;
+    --color-border-input: #8b93a1;
+    --color-text-primary: #f3f4f6;
+    --color-text-secondary: #9ca3af;
+    --color-text-disabled: #6b7280;
+    --color-text-inverse: #0b0e14;
+    --color-focus-ring: var(--color-brand-400);
+
+    --color-success: #4ade80;
+    --color-warning: #fbbf24;
+    --color-danger: #f87171;
+    --color-info: var(--color-brand-400);
+
+    --color-brand-fill: var(--color-brand-400);
+    --color-brand-fill-hover: var(--color-brand-300);
+    --color-brand-fill-active: var(--color-brand-300);
+    --color-brand-text: var(--color-brand-400);
+    --color-tag-bg: var(--color-surface-sunken);
+    --color-accent-fill: var(--color-accent-400);
+    --color-accent-fill-hover: var(--color-accent-300);
+    --color-accent-text: var(--color-accent-400);
+    --color-accent-tint: var(--color-surface-sunken);
+
+    --gradient-hero-glow:
+      radial-gradient(
+        circle at 15% 20%,
+        rgba(125, 166, 255, 0.16),
+        transparent 55%
+      ),
+      radial-gradient(
+        circle at 85% 75%,
+        rgba(45, 212, 191, 0.14),
+        transparent 55%
+      );
+
+    --elevation-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --elevation-md: 0 4px 16px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Manual override: forced dark (theme-toggle set to "dark") regardless of OS setting */
+:root[data-theme="dark"] {
+  --color-brand-400: #7da6ff;
+  --color-brand-300: #a9c4ff;
+  --color-accent-400: #2dd4bf;
+  --color-accent-300: #5eead4;
+
+  --color-surface-page: #0b0e14;
+  --color-surface-raised: #12161f;
+  --color-surface-sunken: #171c27;
+  --color-border-default: #262b36;
+  --color-border-input: #8b93a1;
+  --color-text-primary: #f3f4f6;
+  --color-text-secondary: #9ca3af;
+  --color-text-disabled: #6b7280;
+  --color-text-inverse: #0b0e14;
+  --color-focus-ring: var(--color-brand-400);
+
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-info: var(--color-brand-400);
+
+  --color-brand-fill: var(--color-brand-400);
+  --color-brand-fill-hover: var(--color-brand-300);
+  --color-brand-fill-active: var(--color-brand-300);
+  --color-brand-text: var(--color-brand-400);
+  --color-tag-bg: var(--color-surface-sunken);
+  --color-accent-fill: var(--color-accent-400);
+  --color-accent-fill-hover: var(--color-accent-300);
+  --color-accent-text: var(--color-accent-400);
+  --color-accent-tint: var(--color-surface-sunken);
+
+  --gradient-hero-glow:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(125, 166, 255, 0.16),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(45, 212, 191, 0.14),
+      transparent 55%
+    );
+
+  --elevation-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --elevation-md: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+/* Manual override: forced light (theme-toggle set to "light") regardless of OS setting.
+   Values equal the :root light defaults; listed explicitly so this selector wins
+   over an OS-dark @media block, with equal-specificity concerns avoided by scoping
+   the dark block to :not([data-theme="light"]) above. */
+:root[data-theme="light"] {
+  --color-surface-page: var(--color-neutral-0);
+  --color-surface-raised: var(--color-neutral-50);
+  --color-surface-sunken: var(--color-neutral-100);
+  --color-border-default: var(--color-neutral-200);
+  --color-border-input: var(--color-neutral-500);
+  --color-text-primary: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-disabled: var(--color-neutral-400);
+  --color-text-inverse: var(--color-neutral-0);
+  --color-focus-ring: var(--color-brand-600);
+
+  --color-success: #15803d;
+  --color-warning: #92400e;
+  --color-danger: #b91c1c;
+  --color-info: var(--color-brand-600);
+
+  --color-brand-fill: var(--color-brand-600);
+  --color-brand-fill-hover: var(--color-brand-700);
+  --color-brand-fill-active: var(--color-brand-700);
+  --color-brand-text: var(--color-brand-600);
+  --color-tag-bg: var(--color-brand-100);
+  --color-accent-fill: var(--color-accent-600);
+  --color-accent-fill-hover: var(--color-accent-700);
+  --color-accent-text: var(--color-accent-600);
+  --color-accent-tint: var(--color-accent-100);
+
+  --gradient-hero-glow:
+    radial-gradient(circle at 15% 20%, rgba(29, 78, 216, 0.1), transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(13, 148, 136, 0.1), transparent 55%);
+
+  --elevation-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --elevation-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
