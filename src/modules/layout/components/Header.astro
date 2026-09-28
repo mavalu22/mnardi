@@ -1,8 +1,13 @@
 ---
-// Site header: wordmark, primary nav (Projects, Blog) and the header-controls
-// group (language switcher; the theme toggle is added by T-011 alongside it,
-// 05-design-spec.md §9 xs layout note). Every group stays in one flex row
-// that wraps as a whole at narrow widths — nothing is hidden, no hamburger.
+// Site header (05-design-spec.md §8 "Header", §9, §12; ADR-009): sticky 76px
+// bar with the wordmark, the primary nav (Home/Projects/Writing) and the
+// header-controls group (locale pill, theme toggle, mobile-menu button).
+//
+// At 940px and below the inline nav is replaced by a native
+// `<button popovertarget>` opening a `popover` panel that repeats the nav
+// links; at 640px and below the header's locale pill hides and the panel
+// also carries the two locale links (ADR-009: no `<script>`, the browser's
+// own Popover API drives open/close/Escape/outside-click/focus-return).
 import { localizePath, t, type Locale } from "../../i18n";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import ThemeToggle from "./ThemeToggle.astro";
@@ -11,88 +16,226 @@ interface Props {
   locale: Locale;
   /** The current page's path (may already carry a locale prefix). */
   path: string;
+  section: "home" | "projects" | "writing";
 }
 
-const { locale, path } = Astro.props;
+const { locale, path, section } = Astro.props;
+
+const homeHref = localizePath("/", locale);
+const projectsHref = localizePath("/projects/", locale);
+const writingHref = localizePath("/blog/", locale);
+const menuId = "mobile-menu";
 ---
 
 <header class="site-header">
-  <div class="container">
-    <a class="wordmark" href={localizePath("/", locale)}>
+  <div class="container nav-bar">
+    <a class="wordmark" href={homeHref}>
       <span class="wordmark-brace">{"{"}</span> Matheus Nardi{" "}
       <span class="wordmark-brace">{"}"}</span>
     </a>
+
     <nav class="primary-nav" aria-label={t(locale, "nav.ariaLabel")}>
-      <a href={localizePath("/projects/", locale)}>
+      <a href={homeHref} aria-current={section === "home" ? "page" : undefined}>
+        {t(locale, "nav.home")}
+      </a>
+      <a
+        href={projectsHref}
+        aria-current={section === "projects" ? "page" : undefined}
+      >
         {t(locale, "nav.projects")}
       </a>
-      <a href={localizePath("/blog/", locale)}>{t(locale, "nav.blog")}</a>
+      <a
+        href={writingHref}
+        aria-current={section === "writing" ? "page" : undefined}
+      >
+        {t(locale, "nav.blog")}
+      </a>
     </nav>
+
     <div class="header-controls">
-      <LanguageSwitcher locale={locale} path={path} />
+      <div class="header-locale">
+        <LanguageSwitcher locale={locale} path={path} />
+      </div>
       <ThemeToggle locale={locale} />
+      <button
+        type="button"
+        class="menu-button"
+        popovertarget={menuId}
+        aria-label={t(locale, "mobileMenu.openLabel")}
+      >
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+  </div>
+
+  <div id={menuId} popover class="mobile-menu-panel">
+    <nav
+      class="mobile-menu-nav"
+      aria-label={t(locale, "mobileMenu.navAriaLabel")}
+    >
+      <a href={homeHref} aria-current={section === "home" ? "page" : undefined}>
+        {t(locale, "nav.home")}
+      </a>
+      <a
+        href={projectsHref}
+        aria-current={section === "projects" ? "page" : undefined}
+      >
+        {t(locale, "nav.projects")}
+      </a>
+      <a
+        href={writingHref}
+        aria-current={section === "writing" ? "page" : undefined}
+      >
+        {t(locale, "nav.blog")}
+      </a>
+    </nav>
+
+    <div class="mobile-menu-locale">
+      <LanguageSwitcher locale={locale} path={path} />
     </div>
   </div>
 </header>
 
 <style>
   .site-header {
-    position: relative;
-    border-bottom: 1px solid var(--color-border-default);
-    padding: var(--space-4) 0;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--color-line);
   }
-  .site-header::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 2px;
-    background: var(--gradient-accent-bar);
-    opacity: 0.7;
-  }
-  .site-header .container {
+  .nav-bar {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-4);
-    flex-wrap: wrap;
-  }
-
-  .header-controls {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-5);
   }
 
   .wordmark {
     font-family: var(--font-family-mono);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-xl);
-    letter-spacing: -0.01em;
-    color: var(--color-brand-text);
+    font-weight: var(--font-weight-wordmark);
+    font-size: 15px;
+    letter-spacing: -0.025em;
+    color: var(--color-text);
     text-decoration: none;
+    white-space: nowrap;
   }
   .wordmark:hover {
     text-decoration: underline;
   }
   .wordmark-brace {
-    color: var(--color-accent-text);
+    color: var(--color-gold-text);
   }
 
   .primary-nav {
     display: flex;
-    gap: var(--space-5);
     align-items: center;
+    gap: 26px;
+    font-size: 14px;
   }
   .primary-nav a {
-    color: var(--color-text-primary);
+    color: var(--color-muted);
     text-decoration: none;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
   }
-  .primary-nav a:hover {
-    color: var(--color-brand-text);
-    text-decoration: underline;
+  .primary-nav a:hover,
+  .primary-nav a[aria-current="page"] {
+    color: var(--color-text);
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .menu-button {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 16px;
+    cursor: pointer;
+    transition: border-color 180ms;
+  }
+  .menu-button:hover {
+    border-color: var(--color-gold-accent);
+  }
+
+  /* Floating menu panel: browsers give `popover` a UA default of centered/fixed
+     with its own border and background; those are reset here so it can be
+     positioned as the design spec's below-header floating panel instead
+     (05-design-spec.md §8 "Mobile nav menu"). Hidden entirely until the
+     button's popovertarget opens it (native `:popover-open`, no CSS needed
+     to hide the closed state — the UA stylesheet already does that). */
+  .mobile-menu-panel {
+    position: fixed;
+    inset: unset;
+    top: 90px;
+    right: var(--container-padding);
+    left: auto;
+    margin: 0;
+    width: min(260px, calc(100vw - 2 * var(--container-padding)));
+    padding: var(--space-4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-meta-box);
+    background: var(--color-surface);
+    box-shadow: var(--elevation-hover);
+  }
+
+  .mobile-menu-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .mobile-menu-nav a {
+    display: block;
+    padding: var(--space-2) var(--space-2);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    font-size: 15px;
+    text-decoration: none;
+  }
+  .mobile-menu-nav a:hover,
+  .mobile-menu-nav a[aria-current="page"] {
+    color: var(--color-gold-text);
+  }
+
+  /* The panel's own locale links (05-design-spec.md §8, §9): present in the DOM at
+     every width so the panel's markup never changes across breakpoints, but only
+     shown once the header's own locale pill hides at 640px and below. */
+  .mobile-menu-locale {
+    display: none;
+  }
+
+  @media (max-width: 940px) {
+    .primary-nav {
+      display: none;
+    }
+    .menu-button {
+      display: inline-flex;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .header-locale {
+      display: none;
+    }
+    .mobile-menu-locale {
+      display: block;
+      margin-top: var(--space-3);
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--color-line);
+    }
   }
 </style>
