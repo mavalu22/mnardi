@@ -114,6 +114,7 @@ const en = {
   "fallbackNotice.message":
     "This page isn't translated into Portuguese yet — showing the English version.",
 
+  "footer.navAriaLabel": "Footer",
   "footer.email": "Email",
   "footer.linkedin": "LinkedIn",
   "footer.resume": "Resume",

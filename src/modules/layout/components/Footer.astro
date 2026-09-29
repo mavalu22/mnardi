@@ -31,7 +31,7 @@ const writingHref = localizePath("/blog/", locale);
         <span>
           &copy; {year} {siteProfile.name}
         </span>
-        <nav class="footer-links" aria-label={t(locale, "nav.ariaLabel")}>
+        <nav class="footer-links" aria-label={t(locale, "footer.navAriaLabel")}>
           <a href={projectsHref}>{t(locale, "nav.projects")}</a>
           <a href={writingHref}>{t(locale, "nav.blog")}</a>
           <a href={`mailto:${siteProfile.email}`}>

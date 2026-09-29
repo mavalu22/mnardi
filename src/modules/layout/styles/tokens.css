@@ -7,11 +7,13 @@
   (05-design-spec.md §2/§8) — same mechanism as before this redesign,
   only the values it resolves to change.
 
-  Every custom property below a "Back-compat aliases" comment is not part
-  of the design-spec token list; it keeps the exact name every page shipped
-  by T-009-T-015 already reads, pointed at the nearest new token, so those
-  pages keep rendering with no undefined var() until T-021-T-023 replace
-  them and T-024 removes the aliases (05-design-spec.md AC6).
+  T-019 temporarily kept every old (pre-redesign) custom property name as an
+  alias to the nearest new token, so pages not yet migrated by T-021-T-023
+  kept rendering with no undefined var(). T-024 removed every alias that no
+  redesigned page reads; a handful of values that turned out to still be
+  genuinely needed (small secondary text, the focus-ring/skip-link radius,
+  the decorative hero glow) were kept under their existing name as regular
+  tokens instead of being deleted.
 */
 
 :root {
@@ -99,52 +101,16 @@
   --icon-size-lg: 24px;
   --icon-size-xl: 2.5rem;
 
-  /*
-    Back-compat aliases for T-009-T-015 (removed by T-024). Declared once,
-    as var() references: because they resolve on the same element as the
-    tokens they point to, they automatically pick up each theme override
-    below with no need to repeat them per theme block.
-  */
-  --color-surface-page: var(--color-bg);
-  --color-surface-raised: var(--color-surface);
-  --color-surface-sunken: var(--color-surface-2);
-  --color-border-default: var(--color-line);
-  --color-border-input: var(--color-muted);
-  --color-text-primary: var(--color-text);
-  --color-text-secondary: var(--color-muted);
-  --color-text-disabled: var(--color-faint);
-  --color-text-inverse: var(--color-button-ink);
-  --color-tag-bg: var(--color-surface-2);
-  --color-brand-text: var(--color-gold-text);
-  --color-brand-fill: var(--color-gold-accent);
-  --color-brand-fill-hover: var(--color-gold-text);
-  --color-brand-fill-active: var(--color-gold-text);
-  --color-accent-text: var(
-    --color-gold-text
-  ); /* fixes B-003 on unmigrated pages too */
-  --color-accent-fill: var(--color-gold-accent);
-  --color-accent-fill-hover: var(--color-gold-text);
-  --color-accent-tint: var(--color-gold-soft);
-  --gradient-accent-bar: linear-gradient(
-    90deg,
-    var(--color-gold-accent),
-    var(--color-gold-text)
-  );
+  /* Decorative hero glow (§3 color.bg, dark theme note): a soft radial gold
+     wash behind the page corner, same treatment in both themes. */
   --gradient-hero-glow: radial-gradient(
     circle at 10% -8%,
     var(--color-gold-soft),
     transparent 30%
   );
-  --font-size-xs: var(--font-size-meta);
-  --font-size-sm: 0.8125rem; /* 13px, small secondary text */
-  --font-size-lg: var(--font-size-lead);
-  --font-size-xl: 0.9375rem; /* 15px, matches the wordmark's own size (§2) */
+
+  --font-size-sm: 0.8125rem; /* 13px, small secondary text (§4/§8 button and side-index sizes) */
   --radius-sm: 6px; /* matches the prose inline-code radius (§8) */
-  --radius-md: var(--radius-button);
-  --radius-lg: var(--radius-meta-box);
-  --radius-full: var(--radius-pill);
-  --elevation-sm: var(--elevation-hover);
-  --elevation-md: var(--elevation-hover);
 }
 
 /*
