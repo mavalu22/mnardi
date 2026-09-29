@@ -12,9 +12,12 @@ export function profileFor(profile: SiteProfile, locale: Locale): ProfileText {
 
   const overrides = profile.texts[locale];
   return {
-    headline: overrides?.headline ?? en.headline,
-    bio: overrides?.bio ?? en.bio,
     photoAlt: overrides?.photoAlt ?? en.photoAlt,
+    intro: overrides?.intro ?? en.intro,
+    asideNote: overrides?.asideNote ?? en.asideNote,
+    focus: overrides?.focus ?? en.focus,
+    core: overrides?.core ?? en.core,
+    based: overrides?.based ?? en.based,
     resume: overrides?.resume ?? en.resume,
   };
 }
