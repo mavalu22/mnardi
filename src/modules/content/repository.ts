@@ -13,7 +13,7 @@ import {
   type PostSortKey,
   type ProjectSortKey,
 } from "./sort";
-import type { Post, Project, ValidatedGroup } from "./types";
+import type { Heading, Post, Project, ValidatedGroup } from "./types";
 
 type ProjectData = CollectionEntry<"projects">["data"];
 type PostData = CollectionEntry<"posts">["data"];
@@ -21,12 +21,14 @@ type PostData = CollectionEntry<"posts">["data"];
 const projectNonTranslatableFields: readonly (keyof ProjectData)[] = [
   "techStack",
   "links",
+  "topics",
   "order",
   "date",
 ];
 const postNonTranslatableFields: readonly (keyof PostData)[] = [
   "date",
   "updated",
+  "topics",
 ];
 
 function findGroup<Data>(
@@ -107,7 +109,12 @@ function toProject(
     title: data.title,
     description: data.description,
     techStack: data.techStack,
-    links: data.links,
+    // `links` is optional in frontmatter (03 §5); the `Project` type always exposes an object so
+    // existing pages can keep reading `entry.links.repo`/`entry.links.demo` unchanged.
+    links: data.links ?? {},
+    category: data.category,
+    topics: data.topics,
+    meta: data.meta,
     order: data.order,
     date: data.date,
     cover: data.cover,
@@ -131,6 +138,7 @@ function toPost(group: ValidatedGroup<PostData>, locale: Locale): Post {
     date: data.date,
     summary: data.summary,
     updated: data.updated,
+    topics: data.topics,
     body: body ?? "",
   };
 }
@@ -158,9 +166,13 @@ export async function getProject(
   return group ? toProject(group, locale) : undefined;
 }
 
-/** What `<Content />` needs to render an entry's Markdown body via Astro's built-in pipeline. */
+/**
+ * What `<Content />` needs to render an entry's Markdown body via Astro's built-in pipeline, plus
+ * the body's level-2 headings in document order (03 §5), for the detail page's side index.
+ */
 export type RenderedBody = {
   Content: Awaited<ReturnType<typeof render>>["Content"];
+  headings: Heading[];
 };
 
 /**
@@ -187,8 +199,11 @@ async function renderEntry<C extends "projects" | "posts">(
       `content: no raw entry found for id "${value.id}" in collection "${collection}" (internal error)`,
     );
   }
-  const { Content } = await render(entry);
-  return { Content };
+  const { Content, headings } = await render(entry);
+  const h2Headings = headings
+    .filter((heading) => heading.depth === 2)
+    .map(({ slug, text }) => ({ id: slug, text }));
+  return { Content, headings: h2Headings };
 }
 
 /** Renders the project for `slug` in `locale` via Astro's built-in Markdown pipeline. */

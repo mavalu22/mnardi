@@ -31,7 +31,28 @@ const projects = defineCollection({
             {
               message: "links requires at least one of repo or demo",
             },
-          ),
+          )
+          .optional(),
+        category: z
+          .string()
+          .min(1, "category must be 1-40 characters")
+          .max(40, "category must be 1-40 characters")
+          .optional(),
+        topics: z
+          .array(z.string().min(1, "topics items must not be empty"))
+          .min(1, "topics requires 1-4 items")
+          .max(4, "topics requires 1-4 items")
+          .optional(),
+        meta: z
+          .array(
+            z.object({
+              label: z.string().min(1, "meta.label is required"),
+              value: z.string().min(1, "meta.value is required"),
+            }),
+          )
+          .min(1, "meta requires 1-4 items")
+          .max(4, "meta requires 1-4 items")
+          .optional(),
         order: z
           .number()
           .int()
@@ -57,6 +78,11 @@ const posts = defineCollection({
     date: z.coerce.date({ error: "date is required and must be a valid date" }),
     summary: z.string().min(1, "summary is required"),
     updated: z.coerce.date().optional(),
+    topics: z
+      .array(z.string().min(1, "topics items must not be empty"))
+      .min(1, "topics requires 1-4 items")
+      .max(4, "topics requires 1-4 items")
+      .optional(),
   }),
 });
 

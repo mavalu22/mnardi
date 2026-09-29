@@ -36,6 +36,22 @@ const {
 
 const allAlternates = alternates(path);
 
+/**
+ * Which primary-nav section `path` belongs to (05-design-spec.md §8 "Header", §12
+ * semantics): drives `aria-current="page"` on the matching nav link and which footer
+ * variant renders (§8 "Footer"). Derived from the path itself (locale prefix and all)
+ * so every caller — including the pages T-012-T-014 shipped before this task and that
+ * this task doesn't otherwise touch — gets the right section with no prop to pass.
+ */
+type Section = "home" | "projects" | "writing";
+function sectionFor(pagePath: string): Section {
+  const localeNeutral = pagePath.replace(/^\/pt-br(\/|$)/, "/");
+  if (/^\/projects(\/|$)/.test(localeNeutral)) return "projects";
+  if (/^\/blog(\/|$)/.test(localeNeutral)) return "writing";
+  return "home";
+}
+const section = sectionFor(path);
+
 const currentHref = `${siteProfile.siteUrl}${localizePath(path, locale)}`;
 const htmlLang =
   allAlternates.find(
@@ -103,13 +119,13 @@ const headAlternates = fallback
       {t(locale, "nav.skipLink")}
     </a>
 
-    <Header locale={locale} path={path} />
+    <Header locale={locale} path={path} section={section} />
 
     <main id="main">
       <slot />
     </main>
 
-    <Footer locale={locale} />
+    <Footer locale={locale} section={section} />
 
     {/*
       Theme toggle, part 2 of 2: wires the click handler. Reads its localized

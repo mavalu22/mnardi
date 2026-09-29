@@ -1,40 +1,22 @@
 ---
-// Shared empty state: centered icon plus a one-line message slot
-// (05-design-spec.md §8 "Empty state"). No retry button — an empty listing
-// is a content gap, not a failed request.
+// Shared empty state: one centered line of mono text plus the message slot
+// (05-design-spec.md §8 "Empty state" — restyled only, props unchanged: no
+// props, one slot). No icon and no retry button: an empty listing is a
+// content gap, not a failed request.
 ---
 
-<div class="empty-state">
-  <svg
-    class="icon"
-    aria-hidden="true"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.5"
-  >
-    <rect x="3" y="7" width="18" height="13" rx="2"></rect>
-    <path d="M3 7l2-4h14l2 4M3 7h18"></path>
-    <path d="M9 11h6"></path>
-  </svg>
-  <p>
-    <slot />
-  </p>
-</div>
+<p class="empty-state">
+  <slot />
+</p>
 
 <style>
   .empty-state {
     text-align: center;
-    padding: var(--space-8) var(--space-4);
-    color: var(--color-text-secondary);
-  }
-  .empty-state .icon {
-    width: var(--icon-size-xl);
-    height: var(--icon-size-xl);
-    margin: 0 auto var(--space-4) auto;
-    color: var(--color-text-disabled);
-  }
-  .empty-state p {
     margin: 0;
+    padding: var(--space-8) var(--space-4);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-meta);
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
   }
 </style>

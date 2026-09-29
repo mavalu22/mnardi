@@ -1,36 +1,114 @@
 ---
-// Site footer: copyright and a short tagline, localized (05-design-spec.md
-// §11, §8).
-import { t, type Locale } from "../../i18n";
+// Site footer (05-design-spec.md §8 "Footer"): a 1px top line, then either
+// the Home variant (copyright, Projects/Writing/Email links) or an inner-page
+// variant (a back link to the other section's index and a forward link to
+// the sibling pillar), plus low-emphasis LinkedIn and Resume links on every
+// page (vision US-09 AC1 "on any page" — broader than the design spec's
+// inner-page footer example, so these two ship in every variant, not only
+// Home's). The build-time year (not client JS) satisfies AC4's "set at build
+// time" requirement: this file only ever runs at build time (Astro SSG), so
+// `new Date()` here is fixed at build, never re-evaluated in the browser.
+import { localizePath, t, type Locale } from "../../i18n";
+import { siteProfile, profileFor } from "../../site";
 
 interface Props {
   locale: Locale;
+  section: "home" | "projects" | "writing";
 }
 
-const { locale } = Astro.props;
+const { locale, section } = Astro.props;
+
+const year = new Date().getFullYear();
+const resumeHref = profileFor(siteProfile, locale).resume;
+const projectsHref = localizePath("/projects/", locale);
+const writingHref = localizePath("/blog/", locale);
 ---
 
 <footer class="site-footer">
-  <div class="container">
-    <span>{t(locale, "footer.copyright")}</span>
-    <span class="text-xs">{t(locale, "footer.tagline")}</span>
+  <div class="container footer-row">
+    {section === "home" ? (
+      <>
+        <span>
+          &copy; {year} {siteProfile.name}
+        </span>
+        <nav class="footer-links" aria-label={t(locale, "footer.navAriaLabel")}>
+          <a href={projectsHref}>{t(locale, "nav.projects")}</a>
+          <a href={writingHref}>{t(locale, "nav.blog")}</a>
+          <a href={`mailto:${siteProfile.email}`}>
+            {t(locale, "footer.email")}
+          </a>
+        </nav>
+      </>
+    ) : (
+      <>
+        <a href={section === "projects" ? projectsHref : writingHref}>
+          {t(
+            locale,
+            section === "projects"
+              ? "footer.backAllProjects"
+              : "footer.backAllWriting",
+          )}
+        </a>
+        <a href={section === "projects" ? writingHref : projectsHref}>
+          {t(
+            locale,
+            section === "projects"
+              ? "footer.forwardWriting"
+              : "footer.forwardProjects",
+          )}
+        </a>
+      </>
+    )}
+  </div>
+
+  <div class="container footer-row footer-row-low">
+    <a
+      class="footer-low-link"
+      href={siteProfile.linkedin}
+      target="_blank"
+      rel="noopener"
+    >
+      {t(locale, "footer.linkedin")}
+      <span class="sr-only">{t(locale, "a11y.opensInNewTab")}</span>
+    </a>
+    <a class="footer-low-link" href={resumeHref}>
+      {t(locale, "footer.resume")}
+    </a>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    border-top: 1px solid var(--color-border-default);
-    padding: var(--space-5) 0;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
+    border-top: 1px solid var(--color-line);
+    padding: var(--space-5) 0 var(--space-6);
+    color: var(--color-muted);
+    font-size: 12px;
   }
-  .site-footer .container {
+  .footer-row {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: var(--space-3);
   }
+  .footer-row + .footer-row {
+    margin-top: var(--space-3);
+  }
   .site-footer a {
-    color: var(--color-text-secondary);
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .site-footer a:hover {
+    color: var(--color-text);
+  }
+  .footer-links {
+    display: flex;
+    gap: 18px;
+  }
+  .footer-row-low {
+    justify-content: flex-start;
+    gap: var(--space-4);
+  }
+  .footer-low-link {
+    font-size: 11px;
   }
 </style>

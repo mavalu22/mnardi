@@ -1,6 +1,6 @@
 # mnardi
 
-Matheus Nardi's personal portfolio and blog: a static, bilingual (English / Portuguese-BR) website built with [Astro](https://astro.build), listing projects and posts, with page-view analytics via [Umami](https://umami.is). No backend, no database, no accounts.
+Matheus Nardi's personal engineering hub: a static, bilingual (English / Portuguese-BR) website built with [Astro](https://astro.build), showcasing projects and technical writing (the "Writing" section, at the `/blog/` URL), with page-view analytics via [Umami](https://umami.is). No backend, no database, no accounts.
 
 Production: <https://mnardi.com>
 
@@ -68,9 +68,18 @@ Content lives as Markdown files in `src/content/`, one folder per entry. Each en
    techStack:
      - "TypeScript"
      - "Astro"
-   links:
-     repo: "https://github.com/..." # optional, but at least one of repo/demo is required
-     demo: "https://..." # optional
+   links: # optional; when present, needs at least one of repo/demo
+     repo: "https://github.com/..."
+     demo: "https://..."
+   category: "Product" # optional, 1-40 characters, shown in the detail page eyebrow
+   topics: # optional, 1-4 non-empty strings, drives the Projects topic filters
+     - "Product"
+     - "Backend"
+   meta: # optional, 1-4 label/value items, shown as the detail page's meta boxes
+     - label: "Role"
+       value: "Product · Backend"
+     - label: "Stack"
+       value: "TypeScript · Astro"
    order: 1 # optional; sets listing position (ascending); ties/unset sort by English title
    date: 2024-01-01 # optional, display only
    cover: "./cover.png" # optional; coverAlt is required if cover is set
@@ -79,7 +88,7 @@ Content lives as Markdown files in `src/content/`, one folder per entry. Each en
    Full description in Markdown.
    ```
 
-3. Optionally add `pt-br.md` with the same frontmatter, translating `title`, `description`, `coverAlt` and the body. **`techStack`, `links`, `order` and `date` must be identical to `en.md`** — the build fails if they differ or are missing on one side.
+3. Optionally add `pt-br.md` with the same frontmatter, translating `title`, `description`, `category`, `meta`'s labels and values, `coverAlt` and the body. **`techStack`, `links`, `topics`, `order` and `date` must be identical to `en.md`** — the build fails if they differ or are missing on one side. `links` is entirely optional: a project can ship with no `links` field at all, and the owner can add `repo`/`demo` later as a plain Markdown edit.
 4. Put any images referenced by the entry (e.g. `cover.png`) in the same folder.
 
 ### Adding a post
@@ -93,11 +102,13 @@ Content lives as Markdown files in `src/content/`, one folder per entry. Each en
    date: 2024-01-01 # required; publication date, sorts newest first
    summary: "Shown in the listing and as the meta description."
    updated: 2024-02-01 # optional; shown when present
+   topics: # optional, 1-4 non-empty strings, drives the Writing topic filters
+     - "Engineering"
    ---
    Full post body in Markdown (Shiki code highlighting is available).
    ```
 
-3. Optionally add `pt-br.md` with the same frontmatter, translating `title`, `summary` and the body. **`date` and `updated` must be identical to `en.md`.**
+3. Optionally add `pt-br.md` with the same frontmatter, translating `title`, `summary` and the body. **`date`, `updated` and `topics` must be identical to `en.md`.**
 
 A build fails (locally and on Vercel) if a required field is missing, if `en.md` is missing, or if a non-translatable field doesn't match between `en.md` and `pt-br.md`.
 
