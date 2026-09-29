@@ -32,8 +32,8 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
   "a11y.opensInNewTab": "(abre em uma nova aba)",
 
   // Ground truth: factory/attachments/prototype/pt-br/index.html.
-  "home.viewProjectsButton": "Ver projetos ↗",
-  "home.readWritingButton": "Ler escritos ↗",
+  "home.linkedinButton": "LinkedIn",
+  "home.resumeButton": "Currículo",
   "home.githubButton": "GitHub ↗",
   "home.focusLabel": "Foco",
   "home.coreLabel": "Core",
@@ -124,9 +124,6 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
   // Ground truth: pt-br/index.html footer — "Email" stays in English (proper noun); "Projetos"/
   // "Anotações" translated per owner's explicit instruction (T-027).
   "footer.email": "Email",
-  "footer.linkedin": "LinkedIn",
-  // pt-BR wording for "resume" per 01-product-vision.md's own terminology note ("currículo").
-  "footer.resume": "Currículo",
   // Drafted (no pt-BR inner-page footer sample matching the current, approved spec).
   "footer.backAllProjects": "← Todos os projetos",
   "footer.backAllWriting": "← Todas as anotações",

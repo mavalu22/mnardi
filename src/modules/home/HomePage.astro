@@ -63,11 +63,11 @@ const title = "Matheus Nardi — Software/AI Engineer";
         </h1>
         <p class="lead hero-intro">{text.intro}</p>
         <div class="hero-links">
-          <Button variant="primary" href={localizePath("/projects/", locale)}>
-            {t(locale, "home.viewProjectsButton")}
+          <Button variant="primary" href={siteProfile.linkedin} target="_blank">
+            {t(locale, "home.linkedinButton")}
           </Button>
-          <Button variant="outlined" href={localizePath("/blog/", locale)}>
-            {t(locale, "home.readWritingButton")}
+          <Button variant="outlined" href={text.resume}>
+            {t(locale, "home.resumeButton")}
           </Button>
           <Button variant="outlined" href={siteProfile.github} target="_blank">
             {t(locale, "home.githubButton")}
