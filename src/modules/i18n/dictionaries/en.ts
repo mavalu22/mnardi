@@ -53,11 +53,17 @@ const en = {
   "projects.metaDescription":
     "A selection of things I've built, listed in the order I'd want you to see them.",
   "projects.heading": "Projects",
+  // Projects index page hero (05-design-spec.md §11 s02).
+  "eyebrow.projectsIndex": "01 / Projects",
+  "projects.heroHeading": "Software I have built.",
 
   "project.techStackAriaLabel": "Tech stack",
   "project.backToProjects": "Back to Projects",
   "project.repoLink": "Repository",
   "project.demoLink": "Live demo",
+  // Project detail eyebrow word (05-design-spec.md §11 s03): composed as
+  // "{eyebrowLabel} {NN} / {category}" by ProjectPage.
+  "project.eyebrowLabel": "Project",
   "post.backToBlog": "Back to Writing",
   "post.published": "Published",
   "post.updated": "Updated",

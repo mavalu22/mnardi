@@ -51,11 +51,18 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
   "projects.metaDescription":
     "Uma seleção de coisas que eu construí, na ordem em que eu gostaria que você as visse.",
   "projects.heading": "Projetos",
+  // Drafted (no pt-BR projects-index sample in the prototype, per T-022's Notes: the index
+  // follows the English layout with translated chrome). "01 / Projects" keeps "Projects" in
+  // English per the nav/footer convention above.
+  "eyebrow.projectsIndex": "01 / Projects",
+  "projects.heroHeading": "Software que eu construí.",
 
   "project.techStackAriaLabel": "Tecnologias utilizadas",
   "project.backToProjects": "Voltar para Projetos",
   "project.repoLink": "Repositório",
   "project.demoLink": "Demonstração",
+  // Ground truth: pt-br/projects/sample-task-tracker.html eyebrow ("Projeto / 2024").
+  "project.eyebrowLabel": "Projeto",
   "post.backToBlog": "Voltar para Writing",
   "post.published": "Publicado em",
   "post.updated": "Atualizado em",
