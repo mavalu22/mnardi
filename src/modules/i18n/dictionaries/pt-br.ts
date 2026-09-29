@@ -48,8 +48,7 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
     "Para conversas profissionais, colaboração ou simplesmente para dizer olá.",
 
   "projects.pageTitle": "Projetos — Matheus Nardi",
-  "projects.metaDescription":
-    "Uma seleção de coisas que eu construí, na ordem em que eu gostaria que você as visse.",
+  "projects.metaDescription": "Uma seleção de coisas que eu construí.",
   "projects.heading": "Projetos",
   // Drafted (no pt-BR projects-index sample in the prototype, per T-022's Notes: the index
   // follows the English layout with translated chrome). "01 / Projects" keeps "Projects" in

@@ -50,8 +50,7 @@ const en = {
     "For professional conversations, collaboration, or simply to say hello.",
 
   "projects.pageTitle": "Projects — Matheus Nardi",
-  "projects.metaDescription":
-    "A selection of things I've built, listed in the order I'd want you to see them.",
+  "projects.metaDescription": "A selection of things I've built.",
   "projects.heading": "Projects",
   // Projects index page hero (05-design-spec.md §11 s02).
   "eyebrow.projectsIndex": "01 / Projects",
