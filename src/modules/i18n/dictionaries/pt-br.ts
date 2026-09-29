@@ -7,11 +7,12 @@ import type en from "./en";
 const ptBr: Partial<Record<keyof typeof en, string>> = {
   "nav.skipLink": "Pular para o conteúdo principal",
   "nav.ariaLabel": "Principal",
-  // Ground truth: factory/attachments/prototype/pt-br/index.html header nav — "Início" for Home,
-  // "Projects" and "Writing" stay in English (TRANSITION_PROMPT.md §5.6).
+  // Ground truth: factory/attachments/prototype/pt-br/index.html header nav — "Início" for Home;
+  // "Projetos"/"Anotações" translated per owner's explicit instruction (T-027, reverses the
+  // earlier "stays in English" convention).
   "nav.home": "Início",
-  "nav.projects": "Projects",
-  "nav.blog": "Writing",
+  "nav.projects": "Projetos",
+  "nav.blog": "Anotações",
 
   "languageSwitcher.ariaLabel": "Idioma",
   "languageSwitcher.en": "EN",
@@ -31,30 +32,28 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
   "a11y.opensInNewTab": "(abre em uma nova aba)",
 
   // Ground truth: factory/attachments/prototype/pt-br/index.html.
-  "home.viewProjectsButton": "Ver projetos ↗",
-  "home.readWritingButton": "Ler escritos ↗",
+  "home.linkedinButton": "LinkedIn",
+  "home.resumeButton": "Currículo",
   "home.githubButton": "GitHub ↗",
   "home.focusLabel": "Foco",
   "home.coreLabel": "Core",
   "home.basedLabel": "Base",
-  "home.projectsEyebrow": "01 / Projects",
+  "home.projectsEyebrow": "01 / Projetos",
   "home.projectsTitle": "Coisas que eu construo.",
   "home.featuredLabelPrefix": "Destaque · ",
   "home.openProject": "Abrir projeto →",
-  "home.writingEyebrow": "02 / Writing",
+  "home.writingEyebrow": "02 / Anotações",
   "home.writingTitle": "O que eu aprendo e explico.",
   "home.contactEyebrow": "03 / Contato",
   "home.contactNote":
     "Para conversas profissionais, colaboração ou simplesmente para dizer olá.",
 
   "projects.pageTitle": "Projetos — Matheus Nardi",
-  "projects.metaDescription":
-    "Uma seleção de coisas que eu construí, na ordem em que eu gostaria que você as visse.",
+  "projects.metaDescription": "Uma seleção de coisas que eu construí.",
   "projects.heading": "Projetos",
   // Drafted (no pt-BR projects-index sample in the prototype, per T-022's Notes: the index
-  // follows the English layout with translated chrome). "01 / Projects" keeps "Projects" in
-  // English per the nav/footer convention above.
-  "eyebrow.projectsIndex": "01 / Projects",
+  // follows the English layout with translated chrome).
+  "eyebrow.projectsIndex": "01 / Projetos",
   "projects.heroHeading": "Software que eu construí.",
 
   "project.techStackAriaLabel": "Tecnologias utilizadas",
@@ -63,24 +62,23 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
   "project.demoLink": "Demonstração",
   // Ground truth: pt-br/projects/sample-task-tracker.html eyebrow ("Projeto / 2024").
   "project.eyebrowLabel": "Projeto",
-  "post.backToBlog": "Voltar para Writing",
+  "post.backToBlog": "Voltar para Anotações",
   "post.published": "Publicado em",
   "post.updated": "Atualizado em",
 
-  // Writing index page hero. Drafted (no pt-BR sample of this index in the prototype, T-023):
-  // "Writing" kept in English per the nav/footer convention above. See DEV report.
-  "blog.pageTitle": "Writing — Matheus Nardi",
-  "blog.eyebrow": "02 / Writing",
+  // Writing index page hero. Drafted (no pt-BR sample of this index in the prototype, T-023).
+  "blog.pageTitle": "Anotações — Matheus Nardi",
+  "blog.eyebrow": "02 / Anotações",
   "blog.heading": "O que eu aprendo, por escrito.",
   "blog.intro":
     "Notas técnicas e ensaios mais longos sobre engenharia de backend, desenvolvimento assistido por IA, design de software e lições que valem a pena guardar.",
-  "post.eyebrowPrefix": "Writing / ",
+  "post.eyebrowPrefix": "Anotações / ",
 
   "eyebrow.getInTouch": "// Fale comigo",
   "eyebrow.topProject": "// Projeto em destaque",
   "eyebrow.latestPost": "// Última publicação",
   "eyebrow.projects": "// Projetos",
-  "eyebrow.blog": "// Writing",
+  "eyebrow.blog": "// Anotações",
   "eyebrow.project": "// Projeto",
   "eyebrow.post": "// Publicação",
 
@@ -123,17 +121,14 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
     "Esta página ainda não foi traduzida para o português — mostrando a versão em inglês.",
 
   "footer.navAriaLabel": "Rodapé",
-  // Ground truth: pt-br/index.html footer — "Projects", "Writing" and "Email" stay in English.
+  // Ground truth: pt-br/index.html footer — "Email" stays in English (proper noun); "Projetos"/
+  // "Anotações" translated per owner's explicit instruction (T-027).
   "footer.email": "Email",
-  "footer.linkedin": "LinkedIn",
-  // pt-BR wording for "resume" per 01-product-vision.md's own terminology note ("currículo").
-  "footer.resume": "Currículo",
-  // Drafted (no pt-BR inner-page footer sample matching the current, approved spec): "Projects"/
-  // "Writing" kept in English per the nav/footer convention above. See DEV report.
-  "footer.backAllProjects": "← All projects",
-  "footer.backAllWriting": "← All writing",
-  "footer.forwardWriting": "Writing ↗",
-  "footer.forwardProjects": "Projects ↗",
+  // Drafted (no pt-BR inner-page footer sample matching the current, approved spec).
+  "footer.backAllProjects": "← Todos os projetos",
+  "footer.backAllWriting": "← Todas as anotações",
+  "footer.forwardWriting": "Anotações ↗",
+  "footer.forwardProjects": "Projetos ↗",
   "footer.tagline":
     "Construído com Astro. Sem cookies, sem rastreamento além das métricas por página.",
 

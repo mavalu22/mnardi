@@ -2,14 +2,13 @@
 // Site footer (05-design-spec.md §8 "Footer"): a 1px top line, then either
 // the Home variant (copyright, Projects/Writing/Email links) or an inner-page
 // variant (a back link to the other section's index and a forward link to
-// the sibling pillar), plus low-emphasis LinkedIn and Resume links on every
-// page (vision US-09 AC1 "on any page" — broader than the design spec's
-// inner-page footer example, so these two ship in every variant, not only
-// Home's). The build-time year (not client JS) satisfies AC4's "set at build
-// time" requirement: this file only ever runs at build time (Astro SSG), so
-// `new Date()` here is fixed at build, never re-evaluated in the browser.
+// the sibling pillar). LinkedIn and Resume links moved to the Home hero
+// (T-028; vision US-09 AC1) and are no longer duplicated here. The build-time
+// year (not client JS) satisfies AC4's "set at build time" requirement: this
+// file only ever runs at build time (Astro SSG), so `new Date()` here is
+// fixed at build, never re-evaluated in the browser.
 import { localizePath, t, type Locale } from "../../i18n";
-import { siteProfile, profileFor } from "../../site";
+import { siteProfile } from "../../site";
 
 interface Props {
   locale: Locale;
@@ -19,7 +18,6 @@ interface Props {
 const { locale, section } = Astro.props;
 
 const year = new Date().getFullYear();
-const resumeHref = profileFor(siteProfile, locale).resume;
 const projectsHref = localizePath("/projects/", locale);
 const writingHref = localizePath("/blog/", locale);
 ---
@@ -60,21 +58,6 @@ const writingHref = localizePath("/blog/", locale);
       </>
     )}
   </div>
-
-  <div class="container footer-row footer-row-low">
-    <a
-      class="footer-low-link"
-      href={siteProfile.linkedin}
-      target="_blank"
-      rel="noopener"
-    >
-      {t(locale, "footer.linkedin")}
-      <span class="sr-only">{t(locale, "a11y.opensInNewTab")}</span>
-    </a>
-    <a class="footer-low-link" href={resumeHref}>
-      {t(locale, "footer.resume")}
-    </a>
-  </div>
 </footer>
 
 <style>
@@ -103,12 +86,5 @@ const writingHref = localizePath("/blog/", locale);
   .footer-links {
     display: flex;
     gap: 18px;
-  }
-  .footer-row-low {
-    justify-content: flex-start;
-    gap: var(--space-4);
-  }
-  .footer-low-link {
-    font-size: 11px;
   }
 </style>
