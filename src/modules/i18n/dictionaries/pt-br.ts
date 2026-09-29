@@ -67,6 +67,15 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
   "post.published": "Publicado em",
   "post.updated": "Atualizado em",
 
+  // Writing index page hero. Drafted (no pt-BR sample of this index in the prototype, T-023):
+  // "Writing" kept in English per the nav/footer convention above. See DEV report.
+  "blog.pageTitle": "Writing — Matheus Nardi",
+  "blog.eyebrow": "02 / Writing",
+  "blog.heading": "O que eu aprendo, por escrito.",
+  "blog.intro":
+    "Notas técnicas e ensaios mais longos sobre engenharia de backend, desenvolvimento assistido por IA, design de software e lições que valem a pena guardar.",
+  "post.eyebrowPrefix": "Writing / ",
+
   "eyebrow.getInTouch": "// Fale comigo",
   "eyebrow.topProject": "// Projeto em destaque",
   "eyebrow.latestPost": "// Última publicação",

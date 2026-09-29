@@ -67,6 +67,15 @@ const en = {
   "post.backToBlog": "Back to Writing",
   "post.published": "Published",
   "post.updated": "Updated",
+  // Writing index page hero (05-design-spec.md §11 s04, prototype blog/index.html).
+  "blog.pageTitle": "Writing — Matheus Nardi",
+  "blog.eyebrow": "02 / Writing",
+  "blog.heading": "What I learn, written down.",
+  "blog.intro":
+    "Technical notes and longer essays about backend engineering, AI-assisted development, software design, and lessons that are worth keeping.",
+  // Article page eyebrow prefix (05-design-spec.md §11 s05, prototype blog/sample-static-site-migration.html:
+  // "Writing / AI · Engineering"); the caller appends the post's topics joined with " · ".
+  "post.eyebrowPrefix": "Writing / ",
 
   "eyebrow.getInTouch": "// Get in touch",
   "eyebrow.topProject": "// Top project",

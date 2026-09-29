@@ -1,13 +1,13 @@
 ---
-// Post detail screen (05-design-spec.md §11 s05; 03-platform-architecture.md §4:
-// `<PostPage entry>`, depends on `layout`, `content`, `i18n`). Renders a post's eyebrow, title,
-// dates, full Markdown body (headings, lists, links, Shiki-highlighted code blocks, via the
-// `content` module's `renderPost()` and Astro's own built-in Markdown pipeline) and, for a
-// pt-BR page falling back to English (ADR-007), the fallback notice and a `lang="en"` wrapper
-// around the English content.
-import { BaseLayout, FallbackNotice } from "../layout";
-import { formatDate, localizePath, t, type Locale } from "../i18n";
-import { renderPost, type Post } from "../content";
+// Article screen (05-design-spec.md §11 s05; T-023 AC3-AC5). Renders the article head (eyebrow
+// "Writing / " + topics, title, meta line: month/year, reading time, optional updated date), the
+// body in `Prose` beside a sticky `OnThisPage` index built from the body's own `##` headings, and
+// (for a pt-BR page falling back to English, ADR-007) the fallback notice plus a `lang="en"`
+// wrapper around the English content. Footer back/forward links come from `BaseLayout`'s
+// `section="writing"` handling (Footer.astro), not from this component.
+import { BaseLayout, FallbackNotice, Prose, OnThisPage } from "../layout";
+import { formatMonthYear, t, type Locale } from "../i18n";
+import { renderPost, readingMinutes, type Post } from "../content";
 import { isoDate } from "./isoDate";
 
 interface Props {
@@ -27,7 +27,12 @@ if (!rendered) {
     `PostPage: no renderable entry for slug "${post.slug}" (internal error)`,
   );
 }
-const { Content } = rendered;
+const { Content, headings } = rendered;
+
+const topics = post.topics ?? [];
+const eyebrowText = `${t(locale, "post.eyebrowPrefix")}${topics.join(" · ")}`;
+const minutes = readingMinutes(post.body);
+const readingText = `${minutes} ${t(locale, "readingTime.suffix")}`;
 ---
 
 <BaseLayout
@@ -38,76 +43,85 @@ const { Content } = rendered;
   fallback={post.isFallback}
   ogType="article"
 >
-  <div class="container post-detail">
-    <p class="text-sm">
-      <a href={localizePath("/blog/", locale)}>
-        &larr; {t(locale, "post.backToBlog")}
-      </a>
-    </p>
-
-    <span class="eyebrow">{t(locale, "eyebrow.post")}</span>
-
+  <div class="container article-page">
     {post.isFallback && (
       <div class="fallback-notice-wrap">
         <FallbackNotice>{t(locale, "fallbackNotice.message")}</FallbackNotice>
       </div>
     )}
 
-    <div lang={post.isFallback ? "en" : undefined}>
-      <h1>{post.title}</h1>
-      <p class="text-sm text-secondary post-dates">
-        {t(locale, "post.published")}{" "}
-        <time datetime={isoDate(post.date)}>
-          {formatDate(post.date, contentLocale)}
-        </time>
-        {post.updated && (
-          <>
-            {" "}
-            &middot; {t(locale, "post.updated")}{" "}
-            <time datetime={isoDate(post.updated)}>
-              {formatDate(post.updated, contentLocale)}
-            </time>
-          </>
-        )}
-      </p>
+    <span class="eyebrow">{eyebrowText}</span>
 
-      <div class="prose">
-        <Content />
+    <div lang={post.isFallback ? "en" : undefined}>
+      <section class="article-head">
+        <h1>{post.title}</h1>
+        <p class="article-meta">
+          <time datetime={isoDate(post.date)}>
+            {formatMonthYear(post.date, contentLocale)}
+          </time>
+          <span aria-hidden="true"> · </span>
+          <span>{readingText}</span>
+          {post.updated && (
+            <>
+              <span aria-hidden="true"> · </span>
+              <span>
+                {t(locale, "post.updated")}{" "}
+                <time datetime={isoDate(post.updated)}>
+                  {formatMonthYear(post.updated, contentLocale)}
+                </time>
+              </span>
+            </>
+          )}
+        </p>
+      </section>
+
+      <div class="article-body">
+        <Prose>
+          <Content />
+        </Prose>
+        <OnThisPage
+          label={t(locale, "onThisPage.articleLabel")}
+          headings={headings}
+        />
       </div>
     </div>
   </div>
 </BaseLayout>
 
 <style>
-  .post-detail {
+  .article-page {
     padding-top: var(--space-6);
     padding-bottom: var(--space-8);
   }
   .fallback-notice-wrap {
     margin-bottom: var(--space-5);
   }
-  .post-dates {
-    margin-top: var(--space-2);
+  .article-head {
+    max-width: 760px;
   }
-  .prose {
+  .article-meta {
+    margin: var(--space-3) 0 0 0;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-meta);
+    color: var(--color-muted);
+  }
+
+  .article-body {
+    display: grid;
+    grid-template-columns: minmax(0, 760px) 240px;
+    gap: var(--space-7);
     margin-top: var(--space-6);
-    max-width: 68ch;
   }
-  .prose :global(pre) {
-    background: var(--color-surface-sunken);
-    padding: var(--space-4);
-    border-radius: var(--radius-md);
-    overflow-x: auto;
-    font-size: var(--font-size-sm);
+
+  @media (max-width: 940px) {
+    .article-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
-  .prose :global(code) {
-    background: var(--color-surface-sunken);
-    padding: 0.1em 0.35em;
-    border-radius: var(--radius-sm);
-    font-size: 0.9em;
-  }
-  .prose :global(pre code) {
-    background: none;
-    padding: 0;
+
+  @media (max-width: 640px) {
+    .article-head h1 {
+      font-size: 48px;
+    }
   }
 </style>
