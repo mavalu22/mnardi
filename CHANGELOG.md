@@ -4,6 +4,26 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [CP-2] - 2026-09-29
+
+Engineering-hub redesign, live at [mnardi.com](https://mnardi.com).
+
+### Added
+
+- Full visual redesign in a dark and gold editorial theme: row-based layouts for projects and posts replace the earlier card grids, across Home, the Projects section and the Writing section, in both languages.
+- The site navigation item and page titles previously labeled "Blog" are now labeled "Writing" (a presentation-only rename; the URL still starts with `/blog/` and existing links keep working).
+- A mobile menu (native HTML `popover`) and topic filters on the Projects and Writing listings (CSS `:has()`), both built with no JavaScript; the site's strict Content Security Policy is unchanged, with no new script added.
+- Three real portfolio projects — Goalden, ADA Management and Runara — with stack, role and context details, replacing the earlier placeholder project.
+- The first real blog post, "Building better software with AI agents," replacing the earlier placeholder post.
+- New optional fields for future projects and posts: a `category` label, up to 4 `topics` tags (used by the new topic filters), and, for projects, a `meta` box (role, stack and similar short facts) shown on the project page; a project's repo/demo links are now optional and can be added later.
+
+### Fixed
+
+- Accessibility contrast issues found during a full site-wide accessibility and performance audit: eyebrow labels, row numbers and dates, and meta-box labels now meet WCAG AA contrast in both light and dark theme.
+- A code-block theming bug where fenced code blocks in an article could show light, hard-to-read colors instead of the intended dark panel.
+- A navigation labeling issue where the site's two navigation menus (header and footer) were not distinguishable to assistive-technology users.
+- The audit found zero serious or critical accessibility violations (axe-core) and a perfect Lighthouse score (100/100/100/100) on every page type; one minor, non-blocking finding remains open for a future fix (a landmark on the Home page isn't at the top level for assistive-technology navigation).
+
 ## [CP-1] - 2026-09-29
 
 First public release of the site, live at [mnardi.com](https://mnardi.com).
