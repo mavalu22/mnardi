@@ -1,6 +1,6 @@
 # mnardi
 
-Matheus Nardi's personal portfolio and blog: a static, bilingual (English / Portuguese-BR) website built with [Astro](https://astro.build), listing projects and posts, with page-view analytics via [Umami](https://umami.is). No backend, no database, no accounts.
+Matheus Nardi's personal engineering hub: a static, bilingual (English / Portuguese-BR) website built with [Astro](https://astro.build), showcasing projects and technical writing (the "Writing" section, at the `/blog/` URL), with page-view analytics via [Umami](https://umami.is). No backend, no database, no accounts.
 
 Production: <https://mnardi.com>
 
