@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [CP-4] - 2026-09-29
+
+### Changed
+
+- The Home page hero's "View projects" and "Read writing" buttons are now direct links to LinkedIn and Resume, alongside the existing GitHub link; the LinkedIn and Resume links were removed from the footer accordingly.
+- Shortened the Projects page's intro text to "A selection of things I've built."
+- In the Portuguese version of the site, "Projects" and "Writing" are now fully translated to "Projetos" and "Anotações."
+
+### Fixed
+
+- The Projects page's top spacing now matches the Writing page.
+
 ## [CP-3] - 2026-09-29
 
 ### Added
