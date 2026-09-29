@@ -7,9 +7,17 @@ import type { Locale } from "../i18n";
 import profilePhoto from "./assets/profile-photo.jpeg";
 
 export interface ProfileText {
-  headline: string;
-  bio: string;
   photoAlt: string;
+  /** One-sentence intro under the Home hero's H1 (05-design-spec.md §8 "Home hero"). */
+  intro: string;
+  /** The hero aside's short paragraph, above the Focus/Core/Based rows. */
+  asideNote: string;
+  /** Focus row value, e.g. "Software Engineering · AI". */
+  focus: string;
+  /** Core row value, e.g. "AI · Go · Python". */
+  core: string;
+  /** Based row value, e.g. "Brazil · UTC−3". */
+  based: string;
   /** Path to a resume PDF under `public/`, e.g. "/resume/matheus-nardi-en.pdf". */
   resume: string;
 }
@@ -35,14 +43,30 @@ export const siteProfile: SiteProfile = {
   github: "https://github.com/mavalu22",
   siteUrl: "https://mnardi.com",
   texts: {
+    // English hero copy: exact ground truth from factory/attachments/prototype/index.html
+    // (05-design-spec.md §13 "not invented copy").
     en: {
-      headline:
-        "Backend Software Engineer with 5 years building production systems in Go, Python and PHP",
-      bio: "At Segura, a cybersecurity company, redesigned an EPM/PEDM product database from 50+ tables down to 25, led a PHP 7.0 to 8.1 migration with zero downtime, integrated Swoole to increase backend throughput without additional infrastructure, and implemented Elasticsearch for product logging. More recently, works at the intersection of backend engineering and AI: building datasets used to train coding models, reviewing and validating AI-generated code, and engineering production-grade prompts. Based in Vitória, Brazil (UTC-3), fully overlapping with US business hours. Open to remote roles, or relocation with visa sponsorship. Tech: Go (Gin), Python, PHP, PostgreSQL, MariaDB, Elasticsearch, Docker, AWS, REST, gRPC, async processing, database schema design.",
       photoAlt: "Portrait of Matheus Nardi",
+      intro:
+        "I build software, study how systems work, and write about the engineering decisions behind them.",
+      asideNote:
+        "This site is my technical hub: a place for shipped software, ongoing work, and ideas worth writing down.",
+      focus: "Software Engineering · AI",
+      core: "AI · Go · Python",
+      based: "Brazil · UTC−3",
       resume: "/resume/matheus-nardi-en.pdf",
     },
-    // No pt-BR headline/bio/photoAlt/resume supplied yet: profileFor("pt-br") falls back to the
-    // English text for each undefined field (03 §5, ADR-003).
+    // pt-BR hero copy: ground truth from factory/attachments/prototype/pt-br/index.html. `resume`
+    // and `photoAlt` are not supplied yet, so profileFor("pt-br") falls back to the English value
+    // for those two fields (03 §5, ADR-003).
+    "pt-br": {
+      intro:
+        "Eu construo software, estudo como sistemas funcionam e escrevo sobre as decisões de engenharia por trás deles.",
+      asideNote:
+        "Este site é meu hub técnico: um lugar para reunir software que construo, trabalho em andamento e ideias que valem ser registradas.",
+      focus: "Software Engineering · AI",
+      core: "AI · Go · Python",
+      based: "Brasil · UTC−3",
+    },
   },
 };

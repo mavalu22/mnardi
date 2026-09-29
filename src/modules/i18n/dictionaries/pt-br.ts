@@ -30,6 +30,23 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
   "home.viewResume": "Ver currículo",
   "a11y.opensInNewTab": "(abre em uma nova aba)",
 
+  // Ground truth: factory/attachments/prototype/pt-br/index.html.
+  "home.viewProjectsButton": "Ver projetos ↗",
+  "home.readWritingButton": "Ler escritos ↗",
+  "home.githubButton": "GitHub ↗",
+  "home.focusLabel": "Foco",
+  "home.coreLabel": "Core",
+  "home.basedLabel": "Base",
+  "home.projectsEyebrow": "01 / Projects",
+  "home.projectsTitle": "Coisas que eu construo.",
+  "home.featuredLabelPrefix": "Destaque · ",
+  "home.openProject": "Abrir projeto →",
+  "home.writingEyebrow": "02 / Writing",
+  "home.writingTitle": "O que eu aprendo e explico.",
+  "home.contactEyebrow": "03 / Contato",
+  "home.contactNote":
+    "Para conversas profissionais, colaboração ou simplesmente para dizer olá.",
+
   "projects.pageTitle": "Projetos — Matheus Nardi",
   "projects.metaDescription":
     "Uma seleção de coisas que eu construí, na ordem em que eu gostaria que você as visse.",

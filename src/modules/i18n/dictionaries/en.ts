@@ -28,6 +28,27 @@ const en = {
   "home.viewResume": "View resume",
   "a11y.opensInNewTab": "(opens in a new tab)",
 
+  // Home screen (05-design-spec.md §8 "Home hero", §11 s01). Text follows the prototype
+  // (factory/attachments/prototype/index.html, pt-br/index.html), not invented copy (§13). The
+  // "Software / AI Engineer" eyebrow and the "Software/AI Engineer" H1 are identical in both
+  // locales in the prototype, so they're plain literals in HomePage.astro rather than dictionary
+  // keys with one shared value.
+  "home.viewProjectsButton": "View projects ↗",
+  "home.readWritingButton": "Read writing ↗",
+  "home.githubButton": "GitHub ↗",
+  "home.focusLabel": "Focus",
+  "home.coreLabel": "Core",
+  "home.basedLabel": "Based",
+  "home.projectsEyebrow": "01 / Projects",
+  "home.projectsTitle": "Things I build.",
+  "home.featuredLabelPrefix": "Featured · ",
+  "home.openProject": "Open project →",
+  "home.writingEyebrow": "02 / Writing",
+  "home.writingTitle": "What I learn and explain.",
+  "home.contactEyebrow": "03 / Contact",
+  "home.contactNote":
+    "For professional conversations, collaboration, or simply to say hello.",
+
   "projects.pageTitle": "Projects — Matheus Nardi",
   "projects.metaDescription":
     "A selection of things I've built, listed in the order I'd want you to see them.",
