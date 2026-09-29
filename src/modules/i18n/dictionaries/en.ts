@@ -33,8 +33,8 @@ const en = {
   // "Software / AI Engineer" eyebrow and the "Software/AI Engineer" H1 are identical in both
   // locales in the prototype, so they're plain literals in HomePage.astro rather than dictionary
   // keys with one shared value.
-  "home.viewProjectsButton": "View projects ↗",
-  "home.readWritingButton": "Read writing ↗",
+  "home.linkedinButton": "LinkedIn",
+  "home.resumeButton": "Resume",
   "home.githubButton": "GitHub ↗",
   "home.focusLabel": "Focus",
   "home.coreLabel": "Core",
@@ -115,8 +115,6 @@ const en = {
 
   "footer.navAriaLabel": "Footer",
   "footer.email": "Email",
-  "footer.linkedin": "LinkedIn",
-  "footer.resume": "Resume",
   "footer.backAllProjects": "← All projects",
   "footer.backAllWriting": "← All writing",
   "footer.forwardWriting": "Writing ↗",
