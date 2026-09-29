@@ -122,6 +122,7 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
   "fallbackNotice.message":
     "Esta página ainda não foi traduzida para o português — mostrando a versão em inglês.",
 
+  "footer.navAriaLabel": "Rodapé",
   // Ground truth: pt-br/index.html footer — "Projects", "Writing" and "Email" stay in English.
   "footer.email": "Email",
   "footer.linkedin": "LinkedIn",

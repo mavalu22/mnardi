@@ -3,7 +3,6 @@
 import "./styles/global.css";
 
 export { default as BaseLayout } from "./BaseLayout.astro";
-export { default as Card } from "./components/Card.astro";
 export { default as EmptyState } from "./components/EmptyState.astro";
 export { default as FallbackNotice } from "./components/FallbackNotice.astro";
 export { default as Button } from "./components/Button.astro";
