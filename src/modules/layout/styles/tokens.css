@@ -244,3 +244,19 @@
   color: var(--shiki-dark) !important;
   background-color: var(--shiki-dark-bg) !important;
 }
+
+/*
+  B-008: fenced code panels don't theme-swap at all (05-design-spec.md §8) — they must
+  render on the dark panel in light theme too, not just in dark theme. Shiki always
+  emits its dark-theme colors as the `--shiki-dark`/`--shiki-dark-bg` custom properties
+  on every `.astro-code` element regardless of which site theme is active, so the same
+  override used above for dark theme is applied here unconditionally (no @media or
+  [data-theme] scoping) to win over Shiki's inline light-theme `color`/`background-color`
+  in every theme. The scoped dark-theme rules above are kept as-is (redundant now, but
+  harmless) since they were already correct.
+*/
+.astro-code,
+.astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
