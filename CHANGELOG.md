@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [CP-3] - 2026-09-29
+
+### Added
+
+- A custom browser tab and bookmark icon (favicon), generated from the owner's own "MN" logo, replacing the earlier placeholder icon.
+
 ## [CP-2] - 2026-09-29
 
 Engineering-hub redesign, live at [mnardi.com](https://mnardi.com).
