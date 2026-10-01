@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [CP-5] - 2026-10-01
+
+### Fixed
+
+- On project detail pages, the label above the title (for example "PROJECT 01 / DEVELOPER TOOLS") no longer touches the header; the page now has the same top spacing as the Writing pages.
+
 ## [CP-4] - 2026-09-29
 
 ### Changed
