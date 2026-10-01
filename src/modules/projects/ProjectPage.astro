@@ -72,11 +72,13 @@ const coverFormat = entry.cover?.format === "svg" ? "svg" : "webp";
   path={path}
   fallback={entry.isFallback}
 >
-  <div class="container">
+  <div class="container project-page">
     {entry.isFallback && (
-      <FallbackNotice>
-        {t(entry.locale, "fallbackNotice.message")}
-      </FallbackNotice>
+      <div class="fallback-notice-wrap">
+        <FallbackNotice>
+          {t(entry.locale, "fallbackNotice.message")}
+        </FallbackNotice>
+      </div>
     )}
 
     <div lang={contentLang}>
@@ -137,12 +139,17 @@ const coverFormat = entry.cover?.format === "svg" ? "svg" : "webp";
 </BaseLayout>
 
 <style>
+  .project-page {
+    padding-top: var(--space-6);
+  }
+  .fallback-notice-wrap {
+    margin-bottom: var(--space-5);
+  }
   .project-hero {
     display: grid;
     grid-template-columns: 1fr 360px;
     gap: var(--space-9);
     align-items: end;
-    padding-top: var(--space-6);
     padding-bottom: var(--space-6);
   }
   .desc {

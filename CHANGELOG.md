@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [CP-6] - 2026-10-01
+
+### Fixed
+
+- On Portuguese project pages that show the "not translated yet" notice, the notice no longer touches the header; it now has the same top spacing as the Portuguese Writing pages.
+
 ## [CP-5] - 2026-10-01
 
 ### Fixed
