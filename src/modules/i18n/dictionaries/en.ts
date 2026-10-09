@@ -89,17 +89,14 @@ const en = {
 
   // Filter pills (05-design-spec.md §8 "Filter pill"; ADR-009). Value is the pill label and also
   // the `data-topics`-matching filter value, so it must equal the topic string used by entries.
-  // `filter.emptyProjects`/`filter.emptyWriting` hold a `{filter}` placeholder the caller
-  // (FilterList's `emptyMessage` per option, T-022/T-023) replaces with the matching pill label.
+  // `filter.emptyWriting` holds a `{filter}` placeholder the caller
+  // (FilterList's `emptyMessage` per option, T-023) replaces with the matching pill label.
   "filter.all": "All",
   "filter.backend": "Backend",
   "filter.ai": "AI",
-  "filter.product": "Product",
   "filter.go": "Go",
   "filter.architecture": "Architecture",
-  "filter.projectsGroupLabel": "Filter projects by topic",
   "filter.writingGroupLabel": "Filter writing by topic",
-  "filter.emptyProjects": "No {filter} projects yet — check back soon.",
   "filter.emptyWriting": "No {filter} posts yet — check back soon.",
 
   "sectionHead.viewAllProjects": "View all projects →",

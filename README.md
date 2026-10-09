@@ -72,7 +72,7 @@ Content lives as Markdown files in `src/content/`, one folder per entry. Each en
      repo: "https://github.com/..."
      demo: "https://..."
    category: "Product" # optional, 1-40 characters, shown in the detail page eyebrow
-   topics: # optional, 1-4 non-empty strings, drives the Projects topic filters
+   topics: # optional, 1-4 non-empty strings, shown as the label above the featured project on the Home page
      - "Product"
      - "Backend"
    meta: # optional, 1-4 label/value items, shown as the detail page's meta boxes
