@@ -1,10 +1,9 @@
 ---
 // Projects listing page (03-platform-architecture.md §4 "<ProjectsPage locale>";
-// 05-design-spec.md §11 s02; ADR-009). Page hero (eyebrow, h1, intro), a
-// zero-JS topic FilterList (All/Backend/AI/Product) and one numbered
-// EntryRow per project, in `getProjects` order, or the shared empty state
-// when there are no projects yet at all (§8 "Empty state").
-import { BaseLayout, EmptyState, FilterList, EntryRow } from "../layout";
+// 05-design-spec.md §11 s02; ADR-009). Page hero (eyebrow, h1, intro) and
+// one numbered EntryRow per project, in `getProjects` order, or the shared
+// empty state when there are no projects yet at all (§8 "Empty state").
+import { BaseLayout, EmptyState, EntryRow } from "../layout";
 import { localizePath, t, type Locale } from "../i18n";
 import { getProjects } from "../content";
 
@@ -15,26 +14,6 @@ interface Props {
 const { locale } = Astro.props;
 const path = "/projects/";
 const projects = await getProjects(locale);
-
-// Fixed pill set (design spec §11 s02, ADR-009's "the pill set must match the
-// topics used by entries"): each option's CSS-matching `value` is also the
-// `data-topics` token EntryRow's wrapper below carries.
-const filterOptionDefs: {
-  value: string;
-  labelKey: "filter.backend" | "filter.ai" | "filter.product";
-}[] = [
-  { value: "Backend", labelKey: "filter.backend" },
-  { value: "AI", labelKey: "filter.ai" },
-  { value: "Product", labelKey: "filter.product" },
-];
-const filterOptions = filterOptionDefs.map(({ value, labelKey }) => {
-  const label = t(locale, labelKey);
-  return {
-    value,
-    label,
-    emptyMessage: t(locale, "filter.emptyProjects").replace("{filter}", label),
-  };
-});
 ---
 
 <BaseLayout
@@ -53,25 +32,16 @@ const filterOptions = filterOptionDefs.map(({ value, labelKey }) => {
     {projects.length === 0 ? (
       <EmptyState>{t(locale, "emptyState.projects")}</EmptyState>
     ) : (
-      <FilterList
-        id="projects-filter"
-        groupLabel={t(locale, "filter.projectsGroupLabel")}
-        allLabel={t(locale, "filter.all")}
-        options={filterOptions}
-      >
-        {projects.map((project, index) => (
-          <div data-topics={(project.topics ?? []).join(" ")}>
-            <EntryRow
-              variant="project"
-              href={localizePath(`/projects/${project.slug}/`, locale)}
-              number={String(index + 1).padStart(2, "0")}
-              title={project.title}
-              description={project.description}
-              meta={project.techStack}
-            />
-          </div>
-        ))}
-      </FilterList>
+      projects.map((project, index) => (
+        <EntryRow
+          variant="project"
+          href={localizePath(`/projects/${project.slug}/`, locale)}
+          number={String(index + 1).padStart(2, "0")}
+          title={project.title}
+          description={project.description}
+          meta={project.techStack}
+        />
+      ))
     )}
   </div>
 </BaseLayout>

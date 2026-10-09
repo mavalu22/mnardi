@@ -91,12 +91,9 @@ const ptBr: Partial<Record<keyof typeof en, string>> = {
   "filter.all": "Todos",
   "filter.backend": "Backend",
   "filter.ai": "AI",
-  "filter.product": "Product",
   "filter.go": "Go",
   "filter.architecture": "Architecture",
-  "filter.projectsGroupLabel": "Filtrar projetos por tema",
   "filter.writingGroupLabel": "Filtrar publicações por tema",
-  "filter.emptyProjects": "Ainda não há projetos de {filter} — volte em breve.",
   "filter.emptyWriting":
     "Ainda não há publicações de {filter} — volte em breve.",
 
