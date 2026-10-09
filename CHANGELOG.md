@@ -4,6 +4,21 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [CP-7] - 2026-10-09
+
+### Changed
+
+- The WholeTeam project entry now shows version 1.3.2, and its stack tags are Multi-agent, Claude Code, OpenAI Codex, Agentic workflows, Model tiering and Git worktrees (Markdown, Bash and PowerShell were removed).
+- Hovering or keyboard-focusing a project row on the Projects page now also highlights its stack column, not only the number, title and description.
+
+### Removed
+
+- The topic filter buttons on the Projects page are removed, in English and Portuguese. The Writing page keeps its filters.
+
+### Fixed
+
+- On the Home page, the featured project's "Open project →" button now responds on hover and keyboard focus, so it no longer looks inactive.
+
 ## [CP-6] - 2026-10-01
 
 ### Fixed
