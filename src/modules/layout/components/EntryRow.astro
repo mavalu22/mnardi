@@ -65,7 +65,8 @@ const metaText = meta.join(" · ");
     gap: 24px;
   }
 
-  .entry-row-project:hover {
+  .entry-row-project:hover,
+  .entry-row-project:focus-visible {
     padding-left: 6px;
   }
 
@@ -112,11 +113,22 @@ const metaText = meta.join(" · ");
     font-size: var(--font-size-meta);
     font-weight: var(--font-weight-medium);
     white-space: nowrap;
+    transition: color 180ms;
+  }
+  .entry-row-project:hover .entry-row-meta,
+  .entry-row-project:focus-visible .entry-row-meta {
+    color: var(--color-text);
   }
   .entry-row-arrow {
+    display: inline-block;
     color: var(--color-gold-accent);
     font-size: 18px;
     margin-left: var(--space-2);
+    transition: transform 180ms;
+  }
+  .entry-row-project:hover .entry-row-arrow,
+  .entry-row-project:focus-visible .entry-row-arrow {
+    transform: translate(2px, -2px);
   }
 
   @media (max-width: 940px) {
