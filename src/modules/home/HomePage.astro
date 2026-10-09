@@ -343,6 +343,24 @@ const title = "Matheus Nardi — Software/AI Engineer";
     background: var(--color-surface);
     border: 1px solid var(--color-line);
     color: var(--color-text);
+    transition:
+      transform 180ms,
+      box-shadow 180ms,
+      border-color 180ms;
+  }
+  .project-feature:hover .btn-static,
+  .project-feature:focus-visible .btn-static {
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-hover);
+    border-color: color-mix(
+      in srgb,
+      var(--color-gold-accent) 55%,
+      var(--color-line)
+    );
+  }
+  .project-feature:active .btn-static {
+    transform: translateY(0);
+    box-shadow: none;
   }
   .project-feature-media {
     min-height: 340px;
