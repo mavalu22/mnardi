@@ -2,12 +2,12 @@
 title: "WholeTeam"
 description: "A software factory for AI coding agents: turns Claude Code or Codex into a full software team that defines your product, then builds it task by task through tests, review, QA and security."
 techStack:
-  - "Markdown"
-  - "Bash"
-  - "PowerShell"
+  - "Multi-agent"
   - "Claude Code"
   - "OpenAI Codex"
-  - "Git"
+  - "Agentic workflows"
+  - "Model tiering"
+  - "Git worktrees"
 links:
   repo: "https://github.com/mavalu22/whole-team"
 category: "Developer Tools"
@@ -19,16 +19,17 @@ meta:
   - label: "Role"
     value: "Creator · Product · Workflow design"
   - label: "Stack"
-    value: "Markdown · Bash · PowerShell"
+    value: "Multi-agent · Agentic workflows · Git worktrees"
   - label: "Agents"
     value: "Claude Code · OpenAI Codex"
   - label: "Version"
-    value: "1.3.0"
+    value: "1.3.2"
 order: 1
 date: 2026-09-30
 cover: "./wholeteam-workflow-dark.png"
 coverAlt: "WholeTeam workflow diagram (simplified)"
 ---
+
 WholeTeam is a software factory for AI coding agents. It is a set of role definitions, workflow rules, templates and installer scripts that turn Claude Code or OpenAI Codex into a complete software team. The team includes a Product Owner, Architect, Developer, Test Engineer, QA, Security and more.
 
 You install it once into an existing git project and type `Let's code`. From then on the main session acts as the **Orchestrator**. It keeps the project state in files and delegates specialist work to 13 role agents, each running on a model tier suited to its job.
